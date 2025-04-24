@@ -4,6 +4,7 @@ const router = express.Router();
 
 const services = require('../services');
 const controller = require('../controller');
+const repositories = require('../repositories');
 
 const int = require('./int');
 const kandilli = require('./kandilli');
@@ -23,11 +24,13 @@ router.use('/deprem/data', data);
  * @return {object} 500 - Server error - application/json
  */
 router.get('/deprem/status', async (req, res) => {
-	return res.json({
+	const result = {
 		status: true,
 		desc: 'kandilli rasathanesi api service',
-		nopeRedis: db.nopeRedis.stats({ showKeys: true, showTotal: true, showSize: true }),
-	});
+		stats: await repositories.rate.stats(),
+		nopeRedis: db.nopeRedis.stats({ showKeys: false, showTotal: true, showSize: true }),
+	};
+	return res.json(result);
 });
 
 /**

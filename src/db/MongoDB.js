@@ -93,8 +93,7 @@ class CRUD {
 	 * @returns
 	 */
 	async count(query = {}) {
-		const result = await connection.db(this.db).collection(this.collection).countDocuments(query);
-		return result;
+		return await connection.db(this.db).collection(this.collection).countDocuments(query);
 	}
 
 	/**

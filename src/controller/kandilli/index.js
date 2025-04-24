@@ -1,6 +1,7 @@
 const helpers = require('../../helpers');
+const repositories = require('../../repositories');
 
-module.exports.live = (req, res, next) => {
+module.exports.live = async (req, res, next) => {
 	const response = {
 		status: true,
 		httpStatus: 200,
@@ -11,6 +12,7 @@ module.exports.live = (req, res, next) => {
 			skip: 0,
 			limit: 100,
 		};
+		await repositories.rate.check(req.ip);
 
 		if (req.query.skip && typeof req.query.skip === 'string') {
 			query.skip = parseInt(req.query.skip, 10);
@@ -40,7 +42,7 @@ module.exports.live = (req, res, next) => {
 	}
 };
 
-module.exports.archive = (req, res, next) => {
+module.exports.archive = async (req, res, next) => {
 	const response = {
 		status: true,
 		httpStatus: 200,
@@ -53,6 +55,8 @@ module.exports.archive = (req, res, next) => {
 			date: helpers.date.moment.moment().tz('Europe/Istanbul').add(-24, 'hours').format('YYYY-MM-DD HH:mm:ss'),
 			date_end: helpers.date.moment.moment().tz('Europe/Istanbul').format('YYYY-MM-DD HH:mm:ss'),
 		};
+
+		await repositories.rate.check(req.ip);
 
 		if (req.query.limit && typeof req.query.limit === 'string') {
 			query.limit = parseInt(req.query.limit, 10);

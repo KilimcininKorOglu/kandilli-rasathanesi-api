@@ -14,7 +14,16 @@ async function connector() {
 }
 
 connector();
-logger.token('real-ip', (req) => req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.ip);
+
+app.set('trust proxy', true);
+app.use((req, res, next) => {
+	const ipFromExpress = req.ip;
+	const ipFromCF = req.headers['cf-connecting-ip'];
+	req.ip = ipFromCF || ipFromExpress;
+	next();
+});
+
+logger.token('real-ip', (req) => req.ip);
 logger.token('datetime', () => new helpers.kk_date().format('YYYY-MM-DD HH:mm:ss'));
 
 const port = 7979;
