@@ -1,5 +1,7 @@
 ### Kandilli Rasathanesi API
 Kandilli Rasathanesi'nin yayınladığı son depremler listesi için API. (last minute earthquakes in turkey parsing from Kandilli Observatory XML)
+##### Servis hakkında duyuruları takip etmen için Whatsapp Topluluk Grubu:
+https://chat.whatsapp.com/KOkShApC4lc9HlMtFFN3kQ
 
 ### API DOC:
 https://api.orhanaydogdu.com.tr/deprem/api-docs/

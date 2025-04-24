@@ -8,7 +8,8 @@ module.exports.location_properties = (lng, lat) => {
 		let closestPoly = { properties: { name: null } };
 		let epiCenter = { properties: { name: null } };
 		let closestCities = [];
-		for (let index = 0; index < db.locations.geojsons.length; index++) {
+		const locations_geojson_length = db.locations.geojsons.length;
+		for (let index = 0; index < locations_geojson_length; index++) {
 			const turf_polf = turf.polygon(db.locations.geojsons[index].coordinates, {
 				name: db.locations.geojsons[index].name,
 				cityCode: db.locations.geojsons[index].number,
@@ -48,7 +49,8 @@ module.exports.location_properties = (lng, lat) => {
 
 	function airports(turfPoint) {
 		const airports = [];
-		for (let index = 0; index < db.locations.airports.length; index++) {
+		const airports_length = db.locations.airports.length;
+		for (let index = 0; index < airports_length; index++) {
 			const turf_polf = turf.polygon(db.locations.airports[index].coordinates, {
 				name: db.locations.airports[index].name,
 				code: db.locations.airports[index].code,

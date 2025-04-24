@@ -5,7 +5,8 @@ const helpers_crawler = require('../index');
 module.exports.kandilli_models = (data, limit = null) => {
 	try {
 		const model_data = [];
-		for (let index = 0; index < data.length; index++) {
+		const data_length = data.length;
+		for (let index = 0; index < data_length; index++) {
 			if (limit && index + 1 > limit) {
 				break;
 			}

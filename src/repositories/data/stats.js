@@ -1,7 +1,7 @@
 const db = require('../../db');
 
 module.exports.dateBy = async (match) => {
-	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
+	return await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
 		{
 			$match: match,
 		},
@@ -32,14 +32,10 @@ module.exports.dateBy = async (match) => {
 			$sort: { total: -1 },
 		},
 	]);
-	if (query === false) {
-		throw Error('db error!');
-	}
-	return query;
 };
 
 module.exports.hourBy = async (match) => {
-	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
+	return await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
 		{
 			$match: match,
 		},
@@ -70,14 +66,10 @@ module.exports.hourBy = async (match) => {
 			$sort: { total: -1 },
 		},
 	]);
-	if (query === false) {
-		throw Error('db error!');
-	}
-	return query;
 };
 
 module.exports.epiCenterBy = async (match) => {
-	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
+	return await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
 		{
 			$match: match,
 		},
@@ -98,14 +90,10 @@ module.exports.epiCenterBy = async (match) => {
 			$limit: 5,
 		},
 	]);
-	if (query === false) {
-		throw Error('db error!');
-	}
-	return query;
 };
 
 module.exports.magBy = async (match) => {
-	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
+	return await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
 		{
 			$match: match,
 		},
@@ -126,14 +114,10 @@ module.exports.magBy = async (match) => {
 			},
 		},
 	]);
-	if (query === false) {
-		throw Error('db error!');
-	}
-	return query;
 };
 
 module.exports.airportsBy = async (match) => {
-	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
+	return await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
 		{
 			$match: match,
 		},
@@ -154,15 +138,12 @@ module.exports.airportsBy = async (match) => {
 			$limit: 5,
 		},
 	]);
-	if (query === false) {
-		throw Error('db error!');
-	}
-	return query;
 };
 
 module.exports.epiCenters = () => {
 	const result = [];
-	for (let index = 0; index < db.locations.geojsons.length; index++) {
+	const locations_geojson_length = db.locations.geojsons.length;
+	for (let index = 0; index < locations_geojson_length; index++) {
 		result.push({
 			city: db.locations.geojsons[index].name,
 			cityCode: db.locations.geojsons[index].number,
@@ -184,7 +165,7 @@ module.exports.epiCenters = () => {
 };
 
 module.exports.dateByEarthQuakes = async (match) => {
-	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
+	return await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
 		{
 			$match: match,
 		},
@@ -223,8 +204,4 @@ module.exports.dateByEarthQuakes = async (match) => {
 			$sort: { _id: 1 },
 		},
 	]);
-	if (query === false) {
-		throw Error('db error!');
-	}
-	return query;
 };

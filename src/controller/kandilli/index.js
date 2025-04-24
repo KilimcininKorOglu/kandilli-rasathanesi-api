@@ -24,6 +24,9 @@ module.exports.live = (req, res, next) => {
 			if (Number.isNaN(query.limit)) {
 				throw new Error('isNaN limit!');
 			}
+			if (query.limit > 100) {
+				query.limit = 100;
+			}
 		}
 
 		req.query = query;
@@ -69,14 +72,14 @@ module.exports.archive = (req, res, next) => {
 
 		if (req.query.date && typeof req.query.date === 'string') {
 			req.query.date = req.query.date.toString();
-			if (!helpers.date.moment.isValid(req.query.date, 'YYYY-MM-DD')) {
+			if (!helpers.kk_date.isValid(req.query.date, 'YYYY-MM-DD')) {
 				throw new Error('date wrong param!');
 			}
 			query.date = helpers.date.moment.moment(req.query.date).startOf('day').format('YYYY-MM-DD HH:mm:ss');
 		}
 		if (req.query.date_end && typeof req.query.date_end === 'string') {
 			req.query.date_end = req.query.date_end.toString();
-			if (!helpers.date.moment.isValid(req.query.date_end, 'YYYY-MM-DD')) {
+			if (!helpers.kk_date.isValid(req.query.date_end, 'YYYY-MM-DD')) {
 				throw new Error('date_end wrong param!');
 			}
 			query.date_end = helpers.date.moment.moment(req.query.date_end).endOf('day').format('YYYY-MM-DD HH:mm:ss');

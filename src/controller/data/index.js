@@ -39,7 +39,8 @@ module.exports.statsGeneral = (req, res, next) => {
 			req.body.types = [];
 		}
 		body.types = [];
-		for (let index = 0; index < req.body.types.length; index++) {
+		const type_length = req.body.types.length;
+		for (let index = 0; index < type_length; index++) {
 			if (req.body.types[index] in constants.stats === false) {
 				throw new Error('type value wrong !');
 			}
@@ -143,6 +144,9 @@ module.exports.search = (req, res, next) => {
 			if (Number.isNaN(body.limit)) {
 				throw new Error('isNaN limit!');
 			}
+			if (body.limit > 1000) {
+				body.limit = 1000;
+			}
 		}
 
 		if (typeof req.body.geoNear === 'object') {
@@ -187,8 +191,8 @@ module.exports.search = (req, res, next) => {
 			}
 			if (typeof req.body.match.date_starts === 'string' && typeof req.body.match.date_ends === 'string') {
 				if (
-					!helpers.date.moment.isValid(req.body.match.date_starts, 'YYYY-MM-DD HH:mm:ss') ||
-					!helpers.date.moment.isValid(req.body.match.date_ends, 'YYYY-MM-DD HH:mm:ss')
+					!helpers.kk_date.isValid(req.body.match.date_starts, 'YYYY-MM-DD HH:mm:ss') ||
+					!helpers.kk_date.isValid(req.body.match.date_ends, 'YYYY-MM-DD HH:mm:ss')
 				) {
 					throw new Error('date_starts or date_ends is not valid!');
 				}

@@ -52,6 +52,9 @@ class CRUD {
 	 * @param {String} collection
 	 */
 	constructor(db, collection) {
+		if (!connection) {
+			throw new Error('db connection error');
+		}
 		this.db = db;
 		this.collection = collection;
 		if (process.env.NODE_ENV === constants.STAGES.DEV) {
@@ -71,25 +74,16 @@ class CRUD {
 	 * @returns {Promise<Array>}
 	 */
 	async find(query = {}, limit = [0, 10], project = {}, sort = {}, collation = {}) {
-		try {
-			if (connection) {
-				const result = await connection
-					.db(this.db)
-					.collection(this.collection)
-					.find(query)
-					.sort(sort)
-					.collation(collation)
-					.skip(limit[0])
-					.limit(limit[1])
-					.project(project)
-					.toArray();
-				return result;
-			}
-			return false;
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
+		return await connection
+			.db(this.db)
+			.collection(this.collection)
+			.find(query)
+			.sort(sort)
+			.collation(collation)
+			.skip(limit[0])
+			.limit(limit[1])
+			.project(project)
+			.toArray();
 	}
 
 	/**
@@ -99,16 +93,8 @@ class CRUD {
 	 * @returns
 	 */
 	async count(query = {}) {
-		try {
-			if (connection) {
-				const result = await connection.db(this.db).collection(this.collection).countDocuments(query);
-				return result;
-			}
-			return false;
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
+		const result = await connection.db(this.db).collection(this.collection).countDocuments(query);
+		return result;
 	}
 
 	/**
@@ -118,20 +104,8 @@ class CRUD {
 	 * @returns
 	 */
 	async insert(data) {
-		try {
-			if (connection) {
-				const result = await connection.db(this.db).collection(this.collection).insertOne(data);
-				// biome-ignore lint/complexity/useOptionalChain: <explanation>
-				if (result && result.insertedId) {
-					return [result.insertedId];
-				}
-				return false;
-			}
-			return false;
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
+		await connection.db(this.db).collection(this.collection).insertOne(data);
+		return true;
 	}
 
 	/**
@@ -140,24 +114,12 @@ class CRUD {
 	 * @param {Array} data
 	 * @returns
 	 */
-	async insertMany(data, objector = true) {
-		try {
-			if (connection) {
-				if (data === false) {
-					return false;
-				}
-				const result = await connection.db(this.db).collection(this.collection).insertMany(data);
-				// biome-ignore lint/complexity/useOptionalChain: <explanation>
-				if (result && result.insertedCount && result.insertedCount > 0) {
-					return result.insertedIds;
-				}
-				return false;
-			}
-			return false;
-		} catch (error) {
-			console.error(error);
+	async insertMany(data) {
+		if (Array.isArray(data) === false) {
 			return false;
 		}
+		await connection.db(this.db).collection(this.collection).insertMany(data);
+		return true;
 	}
 
 	/**
@@ -169,27 +131,12 @@ class CRUD {
 	 * @returns
 	 */
 	async update(query = null, update = null, multiple = false) {
-		if (query === null || update === null) {
-			return false;
+		if (multiple) {
+			await connection.db(this.db).collection(this.collection).updateMany(query, update);
+		} else {
+			await connection.db(this.db).collection(this.collection).updateOne(query, update);
 		}
-		try {
-			if (connection) {
-				let result;
-				if (multiple) {
-					result = await connection.db(this.db).collection(this.collection).updateMany(query, update);
-				} else {
-					result = await connection.db(this.db).collection(this.collection).updateOne(query, update);
-				}
-				if (result) {
-					return { modifiedCount: result.modifiedCount, matchedCount: result.matchedCount };
-				}
-				return false;
-			}
-			return false;
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
+		return true;
 	}
 
 	/**
@@ -198,20 +145,9 @@ class CRUD {
 	 * @param {Object} query
 	 * @returns
 	 */
-	async delete(query, objector = true) {
-		try {
-			if (connection) {
-				const result = await connection.db(this.db).collection(this.collection).deleteMany(query);
-				if (result) {
-					return { result: result.deletedCount };
-				}
-				return false;
-			}
-			return false;
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
+	async delete(query) {
+		await connection.db(this.db).collection(this.collection).deleteMany(query);
+		return true;
 	}
 
 	/**
@@ -220,19 +156,7 @@ class CRUD {
 	 * @param {Object} pipeline aggregation pipeline stages
 	 */
 	async aggregate(pipeline) {
-		try {
-			if (connection) {
-				const result = await connection.db(this.db).collection(this.collection).aggregate(pipeline, { allowDiskUse: true }).toArray();
-				if (result) {
-					return result;
-				}
-				return false;
-			}
-			return false;
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
+		return await connection.db(this.db).collection(this.collection).aggregate(pipeline, { allowDiskUse: true }).toArray();
 	}
 
 	/**
@@ -241,35 +165,11 @@ class CRUD {
 	 * @param {Object} pipeline aggregation pipeline stages
 	 */
 	async listCollection() {
-		try {
-			if (connection) {
-				const result = await connection.db(this.db).listCollections().toArray();
-				if (result) {
-					return result;
-				}
-				return false;
-			}
-			return false;
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
+		return await connection.db(this.db).listCollections().toArray();
 	}
 
 	async createIndex(data) {
-		try {
-			if (connection) {
-				const result = await connection.db(this.db).collection(this.collection).createIndex(data);
-				if (result) {
-					return result;
-				}
-				return false;
-			}
-			return false;
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
+		return await connection.db(this.db).collection(this.collection).createIndex(data);
 	}
 }
 

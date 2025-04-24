@@ -7,7 +7,8 @@ module.exports.multiSave = async (data, collection = 'data_v2') => {
 			return true;
 		}
 		const mustInsert = [];
-		for (let index = 0; index < data.length; index++) {
+		const data_length = data.length;
+		for (let index = 0; index < data_length; index++) {
 			if (Number.isNaN(data[index].mag)) {
 				continue;
 			}
@@ -28,10 +29,7 @@ module.exports.multiSave = async (data, collection = 'data_v2') => {
 		if (mustInsert.length < 1) {
 			return true;
 		}
-		const insert = await new db.MongoDB.CRUD('earthquake', collection).insertMany(mustInsert);
-		if (insert === false) {
-			throw new Error('db insert error!');
-		}
+		await new db.MongoDB.CRUD('earthquake', collection).insertMany(mustInsert);
 		return true;
 	} catch (error) {
 		console.error(error);
@@ -94,9 +92,6 @@ module.exports.list = async (
 			},
 		},
 	]);
-	if (query === false) {
-		throw new Error('kandilli archive find db error!');
-	}
 	if (query.length > 0) {
 		return query[0];
 	}

@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
 		result: [],
 	};
 	try {
-		let kandilli_data;
+		let kandilli_data = false;
 		const key = `kandilli/live/${req.query.skip}/${req.query.limit}`;
 		const check_noperedis = db.nopeRedis.getItem(key);
 		if (check_noperedis) {

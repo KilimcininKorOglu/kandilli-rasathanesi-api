@@ -5,6 +5,7 @@ const expressJSDocSwagger = require('express-jsdoc-swagger');
 
 const app = express();
 const middlewares = require('./src/middlewares');
+const helpers = require('./src/helpers');
 const db = require('./src/db');
 
 // connectors for db, cache etc.;
@@ -13,11 +14,13 @@ async function connector() {
 }
 
 connector();
+logger.token('real-ip', (req) => req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.ip);
+logger.token('datetime', () => new helpers.kk_date().format('YYYY-MM-DD HH:mm:ss'));
 
 const port = 7979;
 
 app.use(cors());
-app.use(logger('dev'));
+app.use(logger(':datetime - :real-ip - :method :url :status :response-time ms'));
 app.use(express.json({ limit: 1000000 }));
 app.use(express.urlencoded({ extended: false }));
 
