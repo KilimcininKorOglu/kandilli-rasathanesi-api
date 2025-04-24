@@ -10,11 +10,6 @@ Söz konusu bilgi, veri ve haritalar Boğaziçi Üniversitesi Rektörlüğü’n
 
 Sorularınız için lütfen info@orhanaydogdu.com.tr adresinden iletişime geçiniz.
 
-## Ticari kullanım hakkında uyarı:
-Söz konusu bilgi, veri ve haritalar Boğaziçi Üniversitesi Rektörlüğü’nün yazılı izni ve onayı olmadan herhangi bir şekilde ticari amaçlı kullanılamaz.
-
-Ticari kullanım talepleriniz veya diğer sorularınız için lütfen info@orhanaydogdu.com.tr adresinden iletişime geçiniz.
-
 ##### Servis hakkında duyuruları takip etmen için Whatsapp Topluluk Grubu:
 
 ```bash
