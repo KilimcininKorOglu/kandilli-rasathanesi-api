@@ -1,7 +1,19 @@
 
 ### Kandilli Rasathanesi API
 
-Kandilli Rasathanesi'nin yayınladığı son depremler listesi için API. (last minute earthquakes in turkey parsing from Kandilli Observatory XML)
+Bu API, Kandilli Rasathanesi tarafından yayınlanan son depremler listesini halka açık ve ücretsiz olarak sunar. Deprem verileri her dakika güncellenmektedir. API üzerinden hem geçmiş depremlere ait arşiv verilerine ulaşabilir, hem de son depremleri canlı olarak takip edebilirsiniz.
+
+Gereksiz isteklerin önüne geçmek amacıyla rate limiting uygulanmaktadır. Lütfen kullanım sırasında bu sınırlamalara dikkat ediniz.
+
+##### Ticari kullanım hakkında uyarı:
+Söz konusu bilgi, veri ve haritalar Boğaziçi Üniversitesi Rektörlüğü’nün yazılı izni ve onayı olmadan herhangi bir şekilde ticari amaçlı kullanılamaz.
+
+Sorularınız için lütfen info@orhanaydogdu.com.tr adresinden iletişime geçiniz.
+
+## Ticari kullanım hakkında uyarı:
+Söz konusu bilgi, veri ve haritalar Boğaziçi Üniversitesi Rektörlüğü’nün yazılı izni ve onayı olmadan herhangi bir şekilde ticari amaçlı kullanılamaz.
+
+Ticari kullanım talepleriniz veya diğer sorularınız için lütfen info@orhanaydogdu.com.tr adresinden iletişime geçiniz.
 
 ##### Servis hakkında duyuruları takip etmen için Whatsapp Topluluk Grubu:
 
