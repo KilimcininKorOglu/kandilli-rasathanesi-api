@@ -1,20 +1,18 @@
 /* eslint-disable no-inner-declarations */
 const helpers = require('../../helpers');
 const repositories = require('../../repositories');
+const constants = require('../../constants');
 const db = require('../../db');
 
 module.exports = async (req, res) => {
-	const responseBody = {
-		status: true,
-		httpStatus: 200,
-		serverloadms: helpers.date.moment.timestampMS(),
-		desc: '',
-		metadata: {
-			date_starts: helpers.date.moment.moment().tz('Europe/Istanbul').add(-24, 'hours').format('YYYY-MM-DD HH:mm:ss'),
-			date_ends: helpers.date.moment.moment().tz('Europe/Istanbul').format('YYYY-MM-DD HH:mm:ss'),
-		},
-		result: [],
+	const responseBody = constants.response();
+	responseBody.serverloadms = helpers.date.moment.timestampMS();
+	responseBody.metadata = {
+		date_starts: helpers.date.moment.moment().tz('Europe/Istanbul').add(-24, 'hours').format('YYYY-MM-DD HH:mm:ss'),
+		date_ends: helpers.date.moment.moment().tz('Europe/Istanbul').format('YYYY-MM-DD HH:mm:ss'),
 	};
+	responseBody.result = [];
+
 	try {
 		let kandilli_data = false;
 		const key = `kandilli/live/${req.query.skip}/${req.query.limit}`;

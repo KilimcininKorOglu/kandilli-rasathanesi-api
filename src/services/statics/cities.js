@@ -1,14 +1,9 @@
 const helpers = require('../../helpers');
 const repositories = require('../../repositories');
+const constants = require('../../constants');
 
 module.exports = async (req, res) => {
-	const responseBody = {
-		status: true,
-		httpStatus: 200,
-		serverloadms: helpers.date.moment.timestampMS(),
-		desc: '',
-		result: {},
-	};
+	const responseBody = constants.response();
 	try {
 		responseBody.result = repositories.data.stats.epiCenters();
 	} catch (error) {

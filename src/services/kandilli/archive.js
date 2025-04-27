@@ -1,16 +1,13 @@
 /* eslint-disable no-inner-declarations */
 const helpers = require('../../helpers');
 const repositories = require('../../repositories');
+const constants = require('../../constants');
 
 module.exports = async (req, res) => {
-	const responseBody = {
-		status: true,
-		httpStatus: 200,
-		serverloadms: helpers.date.moment.timestampMS(),
-		desc: '',
-		metadata: {},
-		result: [],
-	};
+	const responseBody = constants.response();
+	responseBody.serverloadms = helpers.date.moment.timestampMS();
+	responseBody.metadata = {};
+	responseBody.result = [];
 	try {
 		const kandilli_data = await repositories.kandilli.list(req.query.date, req.query.date_end, req.query.skip, req.query.limit);
 		if (!kandilli_data) {

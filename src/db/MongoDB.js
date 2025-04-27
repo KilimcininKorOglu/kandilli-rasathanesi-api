@@ -53,7 +53,7 @@ class CRUD {
 	 */
 	constructor(db, collection) {
 		if (!connection) {
-			throw new Error('db connection error');
+			throw new constants.errors.ServerError('db.connector', 'db connection error !');
 		}
 		this.db = db;
 		this.collection = collection;

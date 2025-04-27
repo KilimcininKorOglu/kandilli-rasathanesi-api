@@ -4,7 +4,7 @@
 	"description": "Kandilli Rasathanesi'nin yayınladığı son depremler listesi için API. (last minute earthquakes in turkey parsing from Kandilli Observatory XML)",
 	"main": "index.js",
 	"scripts": {
-		"start": "NODE_ENV=PROD pm2 start index.js --name kandilli-service -i 3",
+		"start": "NODE_ENV=PROD pm2 start index.js --name kandilli-service -i 4",
 		"dev": "NODE_ENV=DEV pm2 start index.js --name kandilli-service-dev -i 1 --watch",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},

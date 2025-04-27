@@ -1,15 +1,11 @@
 /* eslint-disable no-inner-declarations */
 const helpers = require('../../helpers');
 const repositories = require('../../repositories');
+const constants = require('../../constants');
 
 module.exports = async (req, res) => {
-	const responseBody = {
-		status: true,
-		httpStatus: 200,
-		serverloadms: helpers.date.moment.timestampMS(),
-		desc: '',
-		result: {},
-	};
+	const responseBody = constants.response();
+
 	try {
 		const data = await repositories.data.search(req.body.match, req.body.geoNear, req.body.sort, req.body.skip, req.body.limit, null);
 		responseBody.result = data;

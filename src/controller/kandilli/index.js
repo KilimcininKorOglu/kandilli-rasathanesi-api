@@ -1,12 +1,10 @@
 const helpers = require('../../helpers');
 const repositories = require('../../repositories');
+const constants = require('../../constants');
 
 module.exports.live = async (req, res, next) => {
-	const response = {
-		status: true,
-		httpStatus: 200,
-		desc: '',
-	};
+	const response = constants.response();
+
 	try {
 		const query = {
 			skip: 0,
@@ -17,14 +15,14 @@ module.exports.live = async (req, res, next) => {
 		if (req.query.skip && typeof req.query.skip === 'string') {
 			query.skip = parseInt(req.query.skip, 10);
 			if (Number.isNaN(query.skip)) {
-				throw new Error('isNaN skip!');
+				throw new constants.errors.WrongParam('kandilli.live', 'isNaN skip !');
 			}
 		}
 
 		if (req.query.limit && typeof req.query.limit === 'string') {
 			query.limit = parseInt(req.query.limit, 10);
 			if (Number.isNaN(query.limit)) {
-				throw new Error('isNaN limit!');
+				throw new constants.errors.WrongParam('kandilli.live', 'isNaN limit !');
 			}
 			if (query.limit > 100) {
 				query.limit = 100;
@@ -36,18 +34,15 @@ module.exports.live = async (req, res, next) => {
 	} catch (error) {
 		console.error(error);
 		response.desc = error.message || '';
-		response.httpStatus = 500;
+		response.httpStatus = error.httpStatus || 500;
 		response.status = false;
 		return res.status(response.httpStatus).json(response);
 	}
 };
 
 module.exports.archive = async (req, res, next) => {
-	const response = {
-		status: true,
-		httpStatus: 200,
-		desc: '',
-	};
+	const response = constants.response();
+
 	try {
 		const query = {
 			skip: 0,
@@ -61,7 +56,7 @@ module.exports.archive = async (req, res, next) => {
 		if (req.query.limit && typeof req.query.limit === 'string') {
 			query.limit = parseInt(req.query.limit, 10);
 			if (Number.isNaN(query.limit)) {
-				throw new Error('isNaN limit!');
+				throw new constants.errors.WrongParam('kandilli.archive', 'isNaN limit !');
 			}
 			if (query.limit > 1000) {
 				query.limit = 1000;
@@ -70,21 +65,21 @@ module.exports.archive = async (req, res, next) => {
 		if (req.query.skip && typeof req.query.skip === 'string') {
 			query.skip = parseInt(req.query.skip, 10);
 			if (Number.isNaN(query.skip)) {
-				throw new Error('isNaN skip!');
+				throw new constants.errors.WrongParam('kandilli.archive', 'isNaN skip !');
 			}
 		}
 
 		if (req.query.date && typeof req.query.date === 'string') {
 			req.query.date = req.query.date.toString();
 			if (!helpers.kk_date.isValid(req.query.date, 'YYYY-MM-DD')) {
-				throw new Error('date wrong param!');
+				throw new constants.errors.WrongParam('kandilli.archive', 'date wrong param !');
 			}
 			query.date = helpers.date.moment.moment(req.query.date).startOf('day').format('YYYY-MM-DD HH:mm:ss');
 		}
 		if (req.query.date_end && typeof req.query.date_end === 'string') {
 			req.query.date_end = req.query.date_end.toString();
 			if (!helpers.kk_date.isValid(req.query.date_end, 'YYYY-MM-DD')) {
-				throw new Error('date_end wrong param!');
+				throw new constants.errors.WrongParam('kandilli.archive', 'date_end wrong param !');
 			}
 			query.date_end = helpers.date.moment.moment(req.query.date_end).endOf('day').format('YYYY-MM-DD HH:mm:ss');
 		}
@@ -94,7 +89,7 @@ module.exports.archive = async (req, res, next) => {
 	} catch (error) {
 		console.error(error);
 		response.desc = error.message || '';
-		response.httpStatus = 500;
+		response.httpStatus = error.httpStatus || 500;
 		response.status = false;
 		return res.status(response.httpStatus).json(response);
 	}

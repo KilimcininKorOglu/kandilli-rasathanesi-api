@@ -3,6 +3,7 @@ require('dotenv').config();
 module.exports.CONFIG = {
 	CRON_KEY: process.env.CRON_KEY,
 	STATS_KEY: process.env.STATS_KEY,
+	BYPASS_IPS: process.env.BYPASS_IPS.split(','),
 };
 
 module.exports.STAGES = {
@@ -35,3 +36,13 @@ module.exports.providers = {
 	KANDILLI: 'kandilli',
 	AFAD: 'afad',
 };
+
+module.exports.response = () => {
+	return {
+		status: true,
+		httpStatus: 200,
+		desc: '',
+	};
+};
+
+module.exports.errors = require('./errors');

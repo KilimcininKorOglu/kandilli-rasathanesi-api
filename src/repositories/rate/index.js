@@ -1,13 +1,21 @@
 const db = require('../../db');
 const helpers = require('../../helpers');
+const constants = require('../../constants');
 
 module.exports.check = async (ip) => {
+	if (constants.CONFIG.BYPASS_IPS.includes(ip)) {
+		return true;
+	}
 	const count = await this.count(ip);
 	this.delete();
-	if (count >= 58) {
-		throw new Error('Many Request in 1 minute !');
+	if (count >= 40) {
+		throw new constants.errors.TooManyRequest(
+			'repositories.rate.check',
+			'Too Many Request in 1 minute! Requests limited in 1 minute maximum 40 times',
+		);
 	}
 	this.save(ip);
+	return true;
 };
 
 module.exports.count = async (ip) => {

@@ -5,13 +5,11 @@ const db = require('../../db');
 const repositories = require('../../repositories');
 
 module.exports = async (req, res) => {
-	const responseBody = {
-		status: true,
-		httpStatus: 404,
-		serverloadms: helpers.date.moment.timestampMS(),
-		desc: '',
-		result: null,
-	};
+	const responseBody = constants.response();
+	responseBody.httpStatus = 404;
+	responseBody.serverloadms = helpers.date.moment.timestampMS();
+	responseBody.result = null;
+
 	try {
 		let key = `data/stats/${req.body.provider}/${req.body.range}`;
 		if (req.body.match['location_properties.epiCenter.name']) {

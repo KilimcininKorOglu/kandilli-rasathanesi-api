@@ -2,11 +2,7 @@ const helpers = require('../../helpers');
 const constants = require('../../constants');
 
 module.exports.statsGeneral = (req, res, next) => {
-	const response = {
-		status: true,
-		httpStatus: 200,
-		desc: '',
-	};
+	const response = constants.response();
 	try {
 		const body = {
 			match: {
@@ -17,15 +13,15 @@ module.exports.statsGeneral = (req, res, next) => {
 		body.provider = constants.providers.KANDILLI;
 
 		if (typeof req.body.range !== 'string') {
-			throw new Error('range missing!');
+			throw new constants.errors.MissingField('data.statsGeneral', 'range missing !');
 		}
 		if (req.body.range in constants.statsRange === false) {
-			throw new Error('range wrong!');
+			throw new constants.errors.WrongParam('data.statsGeneral', 'range wrong !');
 		}
 		body.range = req.body.range;
 		if (typeof req.body.provider === 'string') {
 			if (req.body.provider in constants.providers === false) {
-				throw new Error('provider wrong!');
+				throw new constants.errors.WrongParam('data.statsGeneral', 'provider wrong !');
 			}
 			body.match.provider = req.body.provider.toString();
 			body.provider = body.match.provider;
@@ -42,7 +38,7 @@ module.exports.statsGeneral = (req, res, next) => {
 		const type_length = req.body.types.length;
 		for (let index = 0; index < type_length; index++) {
 			if (req.body.types[index] in constants.stats === false) {
-				throw new Error('type value wrong !');
+				throw new constants.errors.WrongParam('data.statsGeneral', 'type value wrong !');
 			}
 			body.types.push(req.body.types[index].toString());
 		}
@@ -103,7 +99,7 @@ module.exports.statsGeneral = (req, res, next) => {
 				};
 				break;
 			default:
-				throw new Error('no range type');
+				throw new constants.errors.WrongParam('data.statsGeneral', 'no range type !');
 		}
 
 		req.body = body;
@@ -111,18 +107,14 @@ module.exports.statsGeneral = (req, res, next) => {
 	} catch (error) {
 		console.error(error);
 		response.desc = error.message || '';
-		response.httpStatus = 500;
+		response.httpStatus = error.httpStatus || 500;
 		response.status = false;
 		return res.status(response.httpStatus).json(response);
 	}
 };
 
 module.exports.search = (req, res, next) => {
-	const response = {
-		status: true,
-		httpStatus: 200,
-		desc: '',
-	};
+	const response = constants.response();
 	try {
 		const body = {
 			skip: 0,
@@ -135,14 +127,14 @@ module.exports.search = (req, res, next) => {
 		if (typeof req.body.skip === 'number') {
 			body.skip = parseInt(req.body.skip, 10);
 			if (Number.isNaN(body.skip)) {
-				throw new Error('isNaN skip!');
+				throw new constants.errors.WrongParam('data.search', 'isNaN skip !');
 			}
 		}
 
 		if (typeof req.body.limit === 'number') {
 			body.limit = parseInt(req.body.limit, 10);
 			if (Number.isNaN(body.limit)) {
-				throw new Error('isNaN limit!');
+				throw new constants.errors.WrongParam('data.search', 'isNaN limit !');
 			}
 			if (body.limit > 1000) {
 				body.limit = 1000;
@@ -151,12 +143,12 @@ module.exports.search = (req, res, next) => {
 
 		if (typeof req.body.geoNear === 'object') {
 			if (typeof req.body.geoNear.lon !== 'number' && typeof req.body.geoNear.lat !== 'number') {
-				throw new Error('lat or lon is not a number!');
+				throw new constants.errors.WrongParam('data.search', 'lat or lon is not a number !');
 			}
 			if (typeof req.body.geoNear.radiusMeter !== 'number') {
 				req.body.geoNear.radiusMeter = parseInt(req.body.geoNear.radiusMeter, 10);
 				if (Number.isNaN(req.body.geoNear.radiusMeter)) {
-					throw new Error('radiusMeter isNaN!');
+					throw new constants.errors.WrongParam('data.search', 'radiusMeter isNaN !');
 				}
 			}
 			body.geoNear = {
@@ -166,7 +158,7 @@ module.exports.search = (req, res, next) => {
 			body.geoNear.geojson['$geoWithin']['$centerSphere'][0][1] = parseFloat(req.body.geoNear.lat);
 			body.geoNear.geojson['$geoWithin']['$centerSphere'][1] = helpers.metersToRadios(req.body.geoNear.radiusMeter);
 			if (body.geoNear.geojson['$geoWithin']['$centerSphere'][1] === false) {
-				throw new Error('meters is false !');
+				throw new constants.errors.WrongParam('data.search', 'meters is false !');
 			}
 		}
 
@@ -186,7 +178,7 @@ module.exports.search = (req, res, next) => {
 			if (req.body.match.mag && typeof req.body.match.mag === 'number') {
 				body.match.mag = { $gte: parseInt(req.body.match.mag, 10) };
 				if (Number.isNaN(body.match.mag['$gte'])) {
-					throw new Error('isNaN mag!');
+					throw new constants.errors.WrongParam('data.search', 'isNaN mag !');
 				}
 			}
 			if (typeof req.body.match.date_starts === 'string' && typeof req.body.match.date_ends === 'string') {
@@ -194,7 +186,7 @@ module.exports.search = (req, res, next) => {
 					!helpers.kk_date.isValid(req.body.match.date_starts, 'YYYY-MM-DD HH:mm:ss') ||
 					!helpers.kk_date.isValid(req.body.match.date_ends, 'YYYY-MM-DD HH:mm:ss')
 				) {
-					throw new Error('date_starts or date_ends is not valid!');
+					throw new constants.errors.WrongParam('data.search', 'date_starts or date_ends is not valid !');
 				}
 				body.match.date_time = { $gte: req.body.search.date_starts.toStrings(), $lte: req.body.match.date_ends.toStrings() };
 			}
@@ -202,7 +194,7 @@ module.exports.search = (req, res, next) => {
 			if (typeof req.body.match.cityCode === 'number') {
 				body.match['location_properties.epiCenter.cityCode'] = parseInt(req.body.match.cityCode, 10);
 				if (Number.isNaN(body.match['location_properties.epiCenter.cityCode'])) {
-					throw new Error('cityCode isNaN!');
+					throw new constants.errors.WrongParam('data.search', 'cityCode isNaN !');
 				}
 			}
 		}
@@ -212,23 +204,20 @@ module.exports.search = (req, res, next) => {
 	} catch (error) {
 		console.error(error);
 		response.desc = error.message || '';
-		response.httpStatus = 500;
+		response.httpStatus = error.httpStatus || 500;
 		response.status = false;
 		return res.status(response.httpStatus).json(response);
 	}
 };
 
 module.exports.get = (req, res, next) => {
-	const response = {
-		status: true,
-		httpStatus: 200,
-		desc: '',
-	};
+	const response = constants.response();
+
 	try {
 		const query = {};
 
 		if (typeof req.query.earthquake_id === 'undefined') {
-			throw new Error('earthquake_id missing param!');
+			throw new constants.errors.MissingField('data.search', 'earthquake_id missing param !');
 		}
 		query.earthquake_id = req.query.earthquake_id.toString();
 		req.query = query;
@@ -236,7 +225,7 @@ module.exports.get = (req, res, next) => {
 	} catch (error) {
 		console.error(error);
 		response.desc = error.message || '';
-		response.httpStatus = 500;
+		response.httpStatus = error.httpStatus || 500;
 		response.status = false;
 		return res.status(response.httpStatus).json(response);
 	}

@@ -1,14 +1,12 @@
 /* eslint-disable no-inner-declarations */
 const helpers = require('../../helpers');
 const repositories = require('../../repositories');
+const constants = require('../../constants');
 
 module.exports = async (req, res) => {
-	const responseBody = {
-		status: true,
-		httpStatus: 200,
-		serverloadms: helpers.date.moment.timestampMS(),
-		desc: '',
-	};
+	const responseBody = constants.response();
+	responseBody.serverloadms = helpers.date.moment.timestampMS();
+
 	try {
 		async function start() {
 			try {
