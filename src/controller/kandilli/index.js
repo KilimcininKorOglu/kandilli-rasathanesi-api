@@ -59,7 +59,7 @@ module.exports.archive = async (req, res, next) => {
 				throw new constants.errors.WrongParam('kandilli.archive', 'isNaN limit !');
 			}
 			if (query.limit > 1000) {
-				query.limit = 1000;
+				throw new constants.errors.WrongParam('kandilli.archive', 'limit maximum can be 1000 !');
 			}
 		}
 		if (req.query.skip && typeof req.query.skip === 'string') {

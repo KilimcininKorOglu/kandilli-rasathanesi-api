@@ -7,6 +7,7 @@ const app = express();
 const middlewares = require('./src/middlewares');
 const helpers = require('./src/helpers');
 const db = require('./src/db');
+const port = 7979;
 
 // connectors for db, cache etc.;
 async function connector() {
@@ -26,8 +27,6 @@ app.use((req, res, next) => {
 logger.token('real-ip', (req) => req.ip);
 logger.token('datetime', () => new helpers.kk_date().format('YYYY-MM-DD HH:mm:ss'));
 
-const port = 7979;
-
 app.use(cors());
 app.use(logger(':datetime - :real-ip - :method :url :status :response-time ms'));
 app.use(express.json({ limit: 1000000 }));
@@ -43,10 +42,9 @@ app.use((err, req, res, next) => {
 		console.error(err);
 		const response = {
 			status: false,
-			desc: '',
-			httpStatus: 500,
+			desc: err.message || '',
+			httpStatus: err.httpStatus || 500,
 		};
-		response.desc = err.message;
 		return res.status(response.httpStatus).send(response); // Bad request
 	}
 	return next();

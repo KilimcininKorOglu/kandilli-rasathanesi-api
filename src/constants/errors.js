@@ -103,6 +103,22 @@ class TooManyRequest extends Error {
 		paramsAdder(this, params);
 	}
 }
+
+class NotFound extends Error {
+	constructor(operation = '', message = '', ...params) {
+		super(...params);
+		if (Error.captureStackTrace) {
+			Error.captureStackTrace(this, NotFound);
+		}
+		this.name = 'NotFound';
+		this.operation = `${operation}`;
+		this.errorCode = 8;
+		this.httpStatus = 404;
+		this.message = `${message}`;
+		this.date = new Date();
+		paramsAdder(this, params);
+	}
+}
 module.exports = {
 	ServerError,
 	MissingField,
@@ -110,4 +126,5 @@ module.exports = {
 	Forbidden,
 	WrongParam,
 	TooManyRequest,
+	NotFound,
 };

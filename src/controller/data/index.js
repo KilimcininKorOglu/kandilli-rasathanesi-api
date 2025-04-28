@@ -137,7 +137,7 @@ module.exports.search = (req, res, next) => {
 				throw new constants.errors.WrongParam('data.search', 'isNaN limit !');
 			}
 			if (body.limit > 1000) {
-				body.limit = 1000;
+				throw new constants.errors.WrongParam('data.search', 'limit maximum can be 1000 !');
 			}
 		}
 
