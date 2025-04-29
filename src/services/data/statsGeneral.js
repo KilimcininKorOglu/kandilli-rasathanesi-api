@@ -15,6 +15,9 @@ module.exports = async (req, res) => {
 		if (req.body.match['location_properties.epiCenter.name']) {
 			key += `/${req.body.match['location_properties.epiCenter.name']}`;
 		}
+		if (req.body.range === constants.statsRange.DATE) {
+			key += `/${req.body.date.starts_date}/${req.body.date.ends_date}`;
+		}
 		if (req.body.types.length > 0) {
 			key += `/${req.body.types.toString()}`;
 		}

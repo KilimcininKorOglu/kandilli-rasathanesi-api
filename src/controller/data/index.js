@@ -19,6 +19,14 @@ module.exports.statsGeneral = (req, res, next) => {
 			throw new constants.errors.WrongParam('data.statsGeneral', 'range wrong !');
 		}
 		body.range = req.body.range;
+		if (req.body.range === 'DATE') {
+			try {
+				body.date = JSON.parse(req.body.date);
+			} catch (error) {
+				console.error(error);
+				throw new constants.errors.ServerError('data.statsGeneral', 'req body date parse error !');
+			}
+		}
 		if (typeof req.body.provider === 'string') {
 			if (req.body.provider in constants.providers === false) {
 				throw new constants.errors.WrongParam('data.statsGeneral', 'provider wrong !');
@@ -98,6 +106,17 @@ module.exports.statsGeneral = (req, res, next) => {
 					$lte: helpers.date.moment.moment().tz('Europe/Istanbul').endOf('month').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
+			case constants.statsRange.DATE: {
+				const total = new helpers.kk_date(body.date.starts_date).diff(body.date.ends_date, 'days');
+				if (total > 7) {
+					throw new constants.errors.WrongParam('data.statsGeneral', 'date range cant be big than 7 days !');
+				}
+				body.match.date_time = {
+					$gte: helpers.date.moment.moment(body.date.starts_date).tz('Europe/Istanbul').startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: helpers.date.moment.moment(body.date.ends_date).endOf('day').tz('Europe/Istanbul').format('YYYY-MM-DD HH:mm:ss'),
+				};
+				break;
+			}
 			default:
 				throw new constants.errors.WrongParam('data.statsGeneral', 'no range type !');
 		}
@@ -188,7 +207,10 @@ module.exports.search = (req, res, next) => {
 				) {
 					throw new constants.errors.WrongParam('data.search', 'date_starts or date_ends is not valid !');
 				}
-				body.match.date_time = { $gte: req.body.search.date_starts.toStrings(), $lte: req.body.match.date_ends.toStrings() };
+				body.match.date_time = {
+					$gte: req.body.search.date_starts.toStrings(),
+					$lte: req.body.match.date_ends.toStrings(),
+				};
 			}
 
 			if (typeof req.body.match.cityCode === 'number') {

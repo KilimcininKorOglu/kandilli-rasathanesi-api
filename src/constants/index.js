@@ -30,6 +30,7 @@ module.exports.statsRange = {
 	LASTMONTH: 'LASTMONTH',
 	LAST2MONTHS: 'LAST2MONTHS',
 	LAST3MONTHS: 'LAST3MONTHS',
+	DATE: 'DATE',
 };
 
 module.exports.providers = {

@@ -192,10 +192,12 @@ module.exports.dateByEarthQuakes = async (match) => {
 				},
 				data: {
 					$push: {
-						mag: '$$ROOT.mag',
-						geojson: '$$ROOT.geojson',
-						title: '$$ROOT.title',
-						date_time: '$$ROOT.date_time',
+						earthquake_id: '$earthquake_id',
+						mag: '$mag',
+						geojson: '$geojson',
+						title: '$title',
+						date_time: '$date_time',
+						location_properties_epiCenter_name: '$location_properties.epiCenter.name',
 					},
 				},
 			},
