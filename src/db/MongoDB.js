@@ -25,7 +25,7 @@ module.exports.connector = async (connectionString = null) => {
 				: `mongodb://${process.env.MONGODB_USER}:${encodeURIComponent(process.env.MONGODB_PASS)}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/admin`;
 			const mongoClient = new MongoClient(uri, {
 				minPoolSize: 5,
-				maxPoolSize: 10,
+				maxPoolSize: 20,
 				connectTimeoutMS: 5 * 1000,
 			});
 			connection = await mongoClient.connect();
