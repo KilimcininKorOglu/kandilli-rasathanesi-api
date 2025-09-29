@@ -300,32 +300,6 @@ npm run dev
 npm start
 ```
 
-### Environment Değişkenleri
-
-`.env` dosyası oluşturun ve aşağıdaki değişkenleri tanımlayın:
-
-```env
-# MongoDB Bağlantısı
-MONGODB_USER=your_mongodb_user
-MONGODB_PASS=your_mongodb_password
-MONGODB_HOST=localhost
-MONGODB_PORT=27017
-
-# Kandilli Veri Kaynakları (İletişime geçin)
-KANDILLI_XML=contact_for_url
-KANDILLI_DATE_XML=contact_for_url
-
-# Güvenlik Anahtarları
-CRON_KEY=your_secure_cron_key
-STATS_KEY=your_secure_stats_key
-BYPASS_IPS=127.0.0.1,::1
-
-# Ortam
-NODE_ENV=DEV  # DEV veya PROD
-```
-
-> ⚠️ **Not**: Kandilli veri kaynak URL'leri için lütfen info@orhanaydogdu.com.tr adresinden iletişime geçin.
-
 ## 📊 Veri Yapısı ve Örnekler
 
 ### Başarılı Response Formatı
