@@ -1,4 +1,4 @@
-module.exports = [
+const airports = [
 	{
 		name: 'Atatürk Havalimanı',
 		number: 34,
@@ -620,3 +620,4 @@ module.exports = [
 		},
 	},
 ];
+module.exports = airports;

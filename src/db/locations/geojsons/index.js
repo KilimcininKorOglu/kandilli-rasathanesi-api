@@ -23,7 +23,7 @@ const yunanistan = require('./yunanistan');
 const mixedLocations = require('./mixed-locations');
 const kibris = require('./kibris');
 
-module.exports = [
+const all_geojsons = [
 	kibris,
 	adriyatikDenizi,
 	arnavutluk,
@@ -49,3 +49,5 @@ module.exports = [
 	yunanistan,
 	...mixedLocations,
 ];
+
+module.exports = all_geojsons;

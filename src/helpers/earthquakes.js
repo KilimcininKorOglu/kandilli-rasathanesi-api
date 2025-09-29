@@ -7,12 +7,22 @@ function locations(turfPoint) {
 	let closestCities = [];
 	const locations_geojson_length = db.locations.geojsons.length;
 	for (let index = 0; index < locations_geojson_length; index++) {
-		const turf_polf = turf.polygon(db.locations.geojsons[index].coordinates, {
-			name: db.locations.geojsons[index].name,
-			cityCode: db.locations.geojsons[index].number,
+		const location = db.locations.geojsons[index];
+		if (!location || !location.coordinates) continue;
+
+		// MultiPolygon için ilk polygon'u kullan
+		const coords = location.coordinates.type === 'MultiPolygon'
+			? location.coordinates.coordinates[0]
+			: location.coordinates.coordinates || location.coordinates;
+
+		if (!coords || !Array.isArray(coords)) continue;
+
+		const turf_polf = turf.polygon(coords, {
+			name: location.name,
+			cityCode: location.number,
 		});
-		const pointOnPoly = turf.pointOnFeature(turf_polf.geometry.coordinates);
-		const isInside = turf.booleanPointInPolygon(turfPoint, turf_polf.geometry.coordinates);
+		const pointOnPoly = turf.pointOnFeature(turf_polf);
+		const isInside = turf.booleanPointInPolygon(turfPoint, turf_polf);
 		const distance = turf.distance(turfPoint, pointOnPoly, {
 			units: 'meters',
 		});
@@ -48,19 +58,21 @@ function airports(turfPoint) {
 	const airports = [];
 	const airports_length = db.locations.airports.length;
 	for (let index = 0; index < airports_length; index++) {
-		const turf_polf = turf.polygon(db.locations.airports[index].coordinates, {
-			name: db.locations.airports[index].name,
-			code: db.locations.airports[index].code,
+		const airport = db.locations.airports[index];
+		if (!airport || !airport.coordinates || !airport.coordinates.coordinates) continue;
+
+		const airportPoint = turf.point(airport.coordinates.coordinates, {
+			name: airport.name,
+			code: airport.code,
 		});
-		const pointOnPoly = turf.pointOnFeature(turf_polf.geometry.coordinates);
-		const distance = turf.distance(turfPoint, pointOnPoly, {
+		const distance = turf.distance(turfPoint, airportPoint, {
 			units: 'meters',
 		});
 		airports.push({
 			distance,
-			name: db.locations.airports[index].name,
-			code: db.locations.airports[index].code,
-			coordinates: db.locations.airports[index].coordinates,
+			name: airport.name,
+			code: airport.code,
+			coordinates: airport.coordinates,
 		});
 	}
 
