@@ -56,11 +56,10 @@ Kandilli Rasathanesi API, **Boğaziçi Üniversitesi Kandilli Rasathanesi** ve *
 - 📖 Swagger/OpenAPI dokümantasyonu
 - 🌍 30+ ülke için sınır verileri
 
-## 🚀 Hızlı Başlangıç
+## 🚀 Hızlı Başlangıç - Tüm Kaynaklar (Kandilli/AFAD)
 
 ```bash
-# Hızlı test
-curl https://api.orhanaydogdu.com.tr/deprem/kandilli/live
+curl https://api.orhanaydogdu.com.tr/deprem
 ```
 
 ## 📚 API Endpoints
