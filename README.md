@@ -1,4 +1,4 @@
-# 🌍 Kandilli Rasathanesi API
+# 🌍 Kandilli Rasathanesi / AFAD API
 
 <div align="center">
 
