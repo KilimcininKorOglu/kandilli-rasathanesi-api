@@ -53,7 +53,7 @@ Kandilli Rasathanesi API, Boğaziçi Üniversitesi Kandilli Rasathanesi tarafın
 - ⚡ 30 saniyelik önbellekleme (canlı veriler)
 - 🔍 Gelişmiş arama ve filtreleme
 - 📈 İstatistik ve analiz endpointleri
-- 🔐 Rate limiting (dakikada 40 istek)
+- 🔐 Rate limiting (dakikada 100 istek)
 - 📖 Swagger/OpenAPI dokümantasyonu
 - 🌍 30+ ülke için sınır verileri
 
@@ -325,7 +325,7 @@ npm start
 {
   "status": false,
   "httpStatus": 429,
-  "desc": "Too Many Request in 1 minute! Requests limited in 1 minute maximum 40 times"
+  "desc": "Too Many Request in 1 minute! Requests limited in 1 minute maximum 100 times"
 }
 ```
 
@@ -488,7 +488,7 @@ npm start
 
 API'nin sürdürülebilirliği için rate limiting uygulanmaktadır:
 
-- **Limit**: Dakikada maksimum 40 istek
+- **Limit**: Dakikada maksimum 100 istek
 - **Kapsam**: IP başına
 - **Bypass**: `BYPASS_IPS` environment değişkeni ile belirli IP'ler muaf tutulabilir
 - **Hata Kodu**: 429 (Too Many Requests)

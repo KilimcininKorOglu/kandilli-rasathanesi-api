@@ -8,10 +8,10 @@ module.exports.check = async (ip) => {
 	}
 	const count = await this.count(ip);
 	this.delete();
-	if (count >= 40) {
+	if (count >= 100) {
 		throw new constants.errors.TooManyRequest(
 			'repositories.rate.check',
-			'Too Many Request in 1 minute! Requests limited in 1 minute maximum 40 times',
+			'Too Many Request in 1 minute! Requests limited in 1 minute maximum 100 times',
 		);
 	}
 	this.save(ip);
