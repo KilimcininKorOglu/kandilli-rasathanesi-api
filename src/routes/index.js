@@ -36,8 +36,12 @@ router.get('/deprem/status', async (_req, res) => {
 
 /**
  * GET /deprem
- * @summary api STATUS
- * @tags INT
+ * @summary api ALL PROVIDERS (KANDILLI + AFAD)
+ * @tags DATA
+ * @param {number} skip.query - limit param limit
+ * @param {number} limit.query - limit param limit
+ * @param {string} date.query.required - date param YYYY-MM-DD
+ * @param {string} date_end.query - date end param YYYY-MM-DD
  * @return {object} 200 - success response - application/json
  * @return {object} 500 - Server error - application/json
  */
