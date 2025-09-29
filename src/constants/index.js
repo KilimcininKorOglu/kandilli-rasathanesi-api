@@ -4,6 +4,7 @@ module.exports.CONFIG = {
 	CRON_KEY: process.env.CRON_KEY,
 	STATS_KEY: process.env.STATS_KEY,
 	BYPASS_IPS: process.env.BYPASS_IPS.split(','),
+	REQUEST_TIMEOUT_MS: parseInt(process.env.REQUEST_TIMEOUT_MS, 10) || 30000,
 };
 
 module.exports.STAGES = {

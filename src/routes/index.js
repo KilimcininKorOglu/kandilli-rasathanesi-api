@@ -5,12 +5,12 @@ const router = express.Router();
 const repositories = require('../repositories');
 const constants = require('../constants');
 
-const int = require('./int');
 const kandilli = require('./kandilli');
 const statics = require('./statics');
 const data = require('./data');
 
-router.use('/deprem/int', int);
+// Internal routes moved to separate service on port 7980
+// router.use('/deprem/int', int);
 router.use('/deprem/kandilli', kandilli);
 router.use('/deprem/statics', statics);
 router.use('/deprem/data', data);

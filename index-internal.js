@@ -1,14 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
-const expressJSDocSwagger = require('express-jsdoc-swagger');
 
 const app = express();
-const middlewares = require('./src/middlewares');
 const helpers = require('./src/helpers');
 const db = require('./src/db');
-const constants = require('./src/constants');
-const port = 7979;
+const port = 7980;
 
 // connectors for db, cache etc.;
 async function connector() {
@@ -33,14 +30,21 @@ app.use(logger(':datetime - :real-ip - :method :url :status :response-time ms'))
 app.use(express.json({ limit: 1000000 }));
 app.use(express.urlencoded({ extended: false }));
 
-// Add timeout middleware (configurable via REQUEST_TIMEOUT_MS env var, default 30 seconds)
-app.use(middlewares.timeout(constants.CONFIG.REQUEST_TIMEOUT_MS));
+// Internal routes only
+const intRoutes = require('./src/routes/int');
+app.use('/deprem/int', intRoutes);
 
-expressJSDocSwagger(app)(middlewares.swagger);
-app.use(express.json({ limit: '50mb' }));
+// Health check endpoint for internal service
+app.get('/health', (_req, res) => {
+	res.json({
+		status: true,
+		service: 'kandilli-internal',
+		port: port,
+		timestamp: new helpers.date.kk_date().format('YYYY-MM-DD HH:mm:ss')
+	});
+});
 
-//routes;
-app.use(require('./src/routes'));
+// Error handling middleware
 app.use((err, _req, res, next) => {
 	if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
 		console.error(err);
@@ -49,23 +53,21 @@ app.use((err, _req, res, next) => {
 			desc: err.message || '',
 			httpStatus: err.httpStatus || 500,
 		};
-		return res.status(response.httpStatus).send(response); // Bad request
+		return res.status(response.httpStatus).send(response);
 	}
 	return next();
 });
 
-/**
- * 404
- */
+// 404 handler
 app.use((_req, res) => {
 	const response = {
 		httpStatus: 404,
 		status: false,
+		desc: 'No endpoint!'
 	};
-	response.desc = 'No endpoint!';
 	return res.status(response.httpStatus).json(response);
 });
 
 app.listen(port, () => {
-	console.log(`Kandilli Rasathanesi API Service API - PORT: ${port}`);
+	console.log(`Kandilli Internal Service - PORT: ${port}`);
 });
