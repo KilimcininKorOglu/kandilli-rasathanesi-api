@@ -1,5 +1,6 @@
 const helpers = require('../../helpers');
 const db = require('../../db');
+const constants = require('../../constants');
 const helpers_crawler = require('../index');
 
 module.exports.kandilli_models = (data, limit = null) => {
@@ -21,7 +22,7 @@ module.exports.kandilli_models = (data, limit = null) => {
 			data[index]['@_lat'] = parseFloat(data[index]['@_lat']);
 			model_data.push({
 				earthquake_id: db.MongoDB.id(),
-				provider: 'kandilli',
+				provider: constants.providers.KANDILLI,
 				title: data[index]['@_lokasyon'],
 				mag: parseFloat(data[index]['@_mag']),
 				depth: parseFloat(data[index]['@_Depth']),
@@ -39,6 +40,41 @@ module.exports.kandilli_models = (data, limit = null) => {
 		return { data: model_data, metadata: { total: data.length } };
 	} catch (error) {
 		console.error(error);
-		return false;
+		return { data: [], metadata: { total: 0 } };
+	}
+};
+
+module.exports.afad_models = (data, limit = null) => {
+	try {
+		const model_data = [];
+		const data_length = data.length;
+		for (let index = 0; index < data_length; index++) {
+			if (limit && index + 1 > limit) {
+				break;
+			}
+			data[index]['location'] = data[index]['location'].trim();
+			data[index]['longitude'] = parseFloat(data[index]['longitude']);
+			data[index]['latitude'] = parseFloat(data[index]['latitude']);
+			model_data.push({
+				earthquake_id: db.MongoDB.id(),
+				provider: constants.providers.AFAD,
+				title: data[index]['location'],
+				mag: parseFloat(data[index]['magnitude']),
+				depth: parseFloat(data[index]['depth']),
+				geojson: {
+					type: 'Point',
+					coordinates: [data[index]['longitude'], data[index]['latitude']],
+				},
+				location_properties: helpers_crawler.earthquakes.location_properties(data[index]['longitude'], data[index]['latitude']),
+				rev: null,
+				date_time: new helpers.date.kk_date(data[index]['eventDate']).add(3, 'hours').format('YYYY-MM-DD HH:mm:ss'),
+				created_at: parseInt(new helpers.date.kk_date(data[index]['eventDate']).add(3, 'hours').format('X'), 10),
+				location_tz: 'Europe/Istanbul',
+			});
+		}
+		return { data: model_data, metadata: { total: data.length } };
+	} catch (error) {
+		console.error(error);
+		return { data: [], metadata: { total: 0 } };
 	}
 };

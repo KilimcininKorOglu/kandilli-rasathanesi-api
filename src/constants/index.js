@@ -39,6 +39,8 @@ module.exports.providers = {
 	AFAD: 'afad',
 };
 
+module.exports.providersList = Object.values(this.providers);
+
 module.exports.response = () => {
 	return {
 		status: true,

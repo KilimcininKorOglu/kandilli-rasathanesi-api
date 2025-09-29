@@ -8,13 +8,28 @@ module.exports = async (_req, res) => {
 	responseBody.serverloadms = new helpers.date.kk_date().format('x');
 
 	try {
-		async function start() {
+		async function kandilliImport() {
 			try {
 				const kandilli_data = await helpers.crawler.kandilli.get();
-				repositories.kandilli.multiSave(kandilli_data.data);
+				repositories.data.multiSave(kandilli_data.data);
 			} catch (error) {
 				console.error(error);
 			}
+		}
+		async function afadImport() {
+			try {
+				const afad_data = await helpers.crawler.afad.get(
+					new helpers.date.kk_date().add(-1, 'days').format('YYYY-MM-DD'),
+					new helpers.date.kk_date().format('YYYY-MM-DD'),
+				);
+				repositories.data.multiSave(afad_data.data);
+			} catch (error) {
+				console.error(error);
+			}
+		}
+		async function start() {
+			await kandilliImport();
+			await afadImport();
 		}
 		start();
 	} catch (error) {

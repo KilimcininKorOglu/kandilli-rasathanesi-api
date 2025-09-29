@@ -4,27 +4,27 @@ const services = require('../../services');
 const controller = require('../../controller');
 
 /**
- * GET /deprem/kandilli/live
+ * GET /deprem/afad/live
  * @param {number} skip.query - skip param skip
  * @param {number} limit.query - limit param limit
- * @summary api earthquakes live endpoint from kandilli
- * @tags DEPREM LIST KANDILLI
+ * @summary api earthquakes live endpoint from afad
+ * @tags DEPREM LIST AFAD
  * @return {object} 200 - success response - application/json
  * @return {object} 500 - Server error - application/json
  */
-router.get('/live', [controller.kandilli.live], services.kandilli.live);
+router.get('/live', [controller.afad.live], services.afad.live);
 
 /**
- * GET /deprem/kandilli/archive
+ * GET /deprem/afad/archive
  * @param {number} skip.query - limit param limit
  * @param {number} limit.query - limit param limit
  * @param {string} date.query.required - date param YYYY-MM-DD
  * @param {string} date_end.query - date end param YYYY-MM-DD
- * @summary api earthquakes archive endpoint from kandilli
- * @tags DEPREM LIST KANDILLI
+ * @summary api earthquakes archive endpoint from afad
+ * @tags DEPREM LIST AFAD
  * @return {object} 200 - success response - application/json
  * @return {object} 500 - Server error - application/json
  */
-router.get('/archive', [controller.kandilli.archive], services.kandilli.archive);
+router.get('/archive', [controller.afad.archive], services.afad.archive);
 
 module.exports = router;

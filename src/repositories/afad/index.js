@@ -13,7 +13,7 @@ module.exports.list = async (
 	limit = 0,
 	sort = null,
 ) => {
-	const agg = [{ $match: { date_time: { $gte: date_starts, $lte: date_ends }, provider: constants.providers.KANDILLI } }];
+	const agg = [{ $match: { date_time: { $gte: date_starts, $lte: date_ends }, provider: constants.providers.AFAD } }];
 	if (sort) {
 		agg.push({ $sort: sort });
 	}

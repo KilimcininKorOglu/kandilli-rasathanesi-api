@@ -1,4 +1,4 @@
-# 🌍 Kandilli Rasathanesi API
+# 🌍 Kandilli Rasathanesi / AFAD API
 
 <div align="center">
 
@@ -22,17 +22,16 @@
 - [Hızlı Başlangıç](#-hızlı-başlangıç)
 - [API Endpoints](#-api-endpoints)
 - [Kurulum](#-kurulum)
-- [Kullanım Örnekleri](#-kullanım-örnekleri)
-- [Veri Yapısı](#-veri-yapısı)
 - [Rate Limiting](#-rate-limiting)
 - [Lisans ve Uyarılar](#-lisans-ve-uyarılar)
 
 ## 📖 Hakkında
 
-Kandilli Rasathanesi API, Boğaziçi Üniversitesi Kandilli Rasathanesi tarafından yayınlanan deprem verilerini işleyerek, zenginleştirilmiş ve kolayca kullanılabilir formatta sunan bir RESTful API servisidir.
+Kandilli Rasathanesi API, **Boğaziçi Üniversitesi Kandilli Rasathanesi** ve **AFAD (Afet ve Acil Durum Yönetimi)** tarafından yayınlanan deprem verilerini işleyerek, zenginleştirilmiş ve kolayca kullanılabilir formatta sunan bir RESTful API servisidir.
 
 ### Neden Bu API?
 
+- ✅ **Çift Kaynak**: Kandilli ve AFAD verilerini birleştirir
 - ✅ **Gerçek Zamanlı**: Veriler her dakika güncellenir
 - ✅ **Zenginleştirilmiş Veri**: Deprem noktasına en yakın şehirler ve havaalanları
 - ✅ **GeoJSON Desteği**: Harita uygulamalarına kolay entegrasyon
@@ -57,164 +56,10 @@ Kandilli Rasathanesi API, Boğaziçi Üniversitesi Kandilli Rasathanesi tarafın
 - 📖 Swagger/OpenAPI dokümantasyonu
 - 🌍 30+ ülke için sınır verileri
 
-## 🚀 Hızlı Başlangıç
-
-### Canlı API Kullanımı
-
-#### cURL Örnekleri
+## 🚀 Hızlı Başlangıç - Tüm Kaynaklar (Kandilli/AFAD)
 
 ```bash
-# Son 24 saatteki depremler
-curl https://api.orhanaydogdu.com.tr/deprem/kandilli/live
-
-# Sayfalama ile son depremler (10-20 arası kayıtlar)
-curl "https://api.orhanaydogdu.com.tr/deprem/kandilli/live?skip=10&limit=10"
-
-# Belirli tarih aralığındaki depremler
-curl "https://api.orhanaydogdu.com.tr/deprem/kandilli/archive?date=2024-01-01&date_end=2024-01-31"
-
-# Tek bir deprem bilgisi
-curl "https://api.orhanaydogdu.com.tr/deprem/data/get?earthquake_id=EoIrMsfMSC19f"
-
-# Gelişmiş arama - Büyüklük filtreleme
-curl -X POST https://api.orhanaydogdu.com.tr/deprem/data/search \
-  -H "Content-Type: application/json" \
-  -d '{
-    "match": {"mag": 4.0},
-    "sort": "mag_-1",
-    "limit": 10
-  }'
-
-# Gelişmiş arama - Konum bazlı (100km yarıçapında)
-curl -X POST https://api.orhanaydogdu.com.tr/deprem/data/search \
-  -H "Content-Type: application/json" \
-  -d '{
-    "geoNear": {
-      "lon": 29.0,
-      "lat": 41.0,
-      "radiusMeter": 100000
-    },
-    "limit": 20
-  }'
-
-# Gelişmiş arama - İstanbul çevresindeki son 1 haftanın 3+ büyüklüğündeki depremleri
-curl -X POST https://api.orhanaydogdu.com.tr/deprem/data/search \
-  -H "Content-Type: application/json" \
-  -d '{
-    "match": {
-      "mag": 3.0,
-      "cityCode": 34,
-      "date_starts": "2024-01-01 00:00:00",
-      "date_ends": "2024-01-07 23:59:59"
-    },
-    "sort": "date_-1",
-    "limit": 50
-  }'
-
-# Şehir listesi
-curl https://api.orhanaydogdu.com.tr/deprem/statics/cities
-
-# API durumu ve istatistikleri
-curl https://api.orhanaydogdu.com.tr/deprem/status
-```
-
-#### JavaScript/Node.js Örneği
-
-```javascript
-// Son depremler
-fetch('https://api.orhanaydogdu.com.tr/deprem/kandilli/live')
-  .then(res => res.json())
-  .then(data => {
-    console.log(`Son ${data.result.length} deprem:`);
-    data.result.forEach(eq => {
-      console.log(`${eq.title} - Büyüklük: ${eq.mag}`);
-    });
-  });
-
-// Gelişmiş arama
-fetch('https://api.orhanaydogdu.com.tr/deprem/data/search', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    match: { mag: 4.5 },
-    sort: 'mag_-1',
-    limit: 5
-  })
-})
-.then(res => res.json())
-.then(data => console.log(data));
-```
-
-#### Python Örneği
-
-```python
-import requests
-import json
-
-# Son depremler
-response = requests.get('https://api.orhanaydogdu.com.tr/deprem/kandilli/live')
-data = response.json()
-
-for earthquake in data['result'][:10]:
-    print(f"{earthquake['title']} - Büyüklük: {earthquake['mag']}")
-
-# Gelişmiş arama - Konum bazlı
-url = 'https://api.orhanaydogdu.com.tr/deprem/data/search'
-payload = {
-    'geoNear': {
-        'lon': 28.9784,  # İstanbul
-        'lat': 41.0082,
-        'radiusMeter': 200000  # 200km
-    },
-    'match': {
-        'mag': 3.0
-    },
-    'limit': 20
-}
-
-response = requests.post(url, json=payload)
-earthquakes = response.json()
-
-for eq in earthquakes['result']:
-    distance = eq['location_properties']['closestCity']['distance'] / 1000
-    print(f"{eq['title']} - {eq['mag']} - {distance:.1f}km uzakta")
-```
-
-#### PHP Örneği
-
-```php
-<?php
-// Son depremler
-$url = 'https://api.orhanaydogdu.com.tr/deprem/kandilli/live';
-$response = file_get_contents($url);
-$data = json_decode($response, true);
-
-foreach (array_slice($data['result'], 0, 10) as $earthquake) {
-    echo $earthquake['title'] . ' - Büyüklük: ' . $earthquake['mag'] . PHP_EOL;
-}
-
-// Gelişmiş arama
-$url = 'https://api.orhanaydogdu.com.tr/deprem/data/search';
-$data = [
-    'match' => ['mag' => 4.0],
-    'sort' => 'date_-1',
-    'limit' => 10
-];
-
-$options = [
-    'http' => [
-        'header' => "Content-Type: application/json\r\n",
-        'method' => 'POST',
-        'content' => json_encode($data)
-    ]
-];
-
-$context = stream_context_create($options);
-$response = file_get_contents($url, false, $context);
-$result = json_decode($response, true);
-?>
+curl https://api.orhanaydogdu.com.tr/deprem
 ```
 
 ## 📚 API Endpoints
@@ -225,42 +70,491 @@ Detaylı API dokümantasyonu ve interaktif test arayüzü için:
 
 🔗 **[https://api.orhanaydogdu.com.tr/deprem/api-docs/](https://api.orhanaydogdu.com.tr/deprem/api-docs/)**
 
-### Public Endpoints
+### Endpoint Listesi
 
-| Method | Endpoint | Açıklama | Cache |
-|--------|----------|----------|-------|
-| `GET` | `/deprem/kandilli/live` | Son 24 saatteki depremler | 30s |
-| `GET` | `/deprem/kandilli/archive` | Tarih bazlı deprem arşivi | - |
-| `POST` | `/deprem/data/search` | Gelişmiş arama | - |
-| `GET` | `/deprem/data/get` | Tekil deprem bilgisi | - |
-| `GET` | `/deprem/statics/cities` | Şehir listesi | - |
-| `GET` | `/deprem/status` | API durumu ve istatistikleri | - |
+| Method | Endpoint | Açıklama | Cache | Rate Limit |
+|--------|----------|----------|-------|------------|
+| `GET` | `/deprem/kandilli/live` | Kandilli - Son 24 saat | 30s | 100/dk |
+| `GET` | `/deprem/kandilli/archive` | Kandilli - Tarih aralığı | - | 100/dk |
+| `GET` | `/deprem/afad/live` | AFAD - Son 24 saat | 30s | 100/dk |
+| `GET` | `/deprem/afad/archive` | AFAD - Tarih aralığı | - | 100/dk |
+| `GET` | `/deprem` | Tüm kaynaklar - Son 24 saat | - | 100/dk |
+| `POST` | `/deprem/data/search` | Gelişmiş arama & filtreleme | - | 100/dk |
+| `GET` | `/deprem/data/get` | Tekil deprem bilgisi | - | 100/dk |
+| `GET` | `/deprem/statics/cities` | Şehir listesi | - | 100/dk |
+| `GET` | `/deprem/status` | API sağlık durumu | - | 100/dk |
 
-### Query Parametreleri
+---
 
-#### `/kandilli/live` ve `/kandilli/archive`
-- `skip`: Atlanacak kayıt sayısı (varsayılan: 0)
-- `limit`: Maksimum kayıt sayısı (varsayılan: 100, max: 1000)
-- `date`: Başlangıç tarihi (YYYY-MM-DD formatında)
-- `date_end`: Bitiş tarihi (YYYY-MM-DD formatında)
+### 1️⃣ Kandilli - Canlı Veriler
 
-#### `/data/search` Request Body
+**Endpoint:** `GET /deprem/kandilli/live`
+
+**Açıklama:** Kandilli Rasathanesi'nden son 24 saatteki depremler.
+
+**Query Parametreleri:**
+- `skip` (number, optional): Atlanacak kayıt sayısı (default: 0)
+- `limit` (number, optional): Maksimum kayıt sayısı (default: 50, max: 100)
+
+**Örnek İstek:**
+```bash
+curl "https://api.orhanaydogdu.com.tr/deprem/kandilli/live?skip=0&limit=10"
+```
+
+**Örnek Response:**
 ```json
 {
+  "status": true,
+  "httpStatus": 200,
+  "serverloadms": 12,
+  "metadata": {
+    "date_starts": "2024-01-07 12:00:00",
+    "date_ends": "2024-01-08 12:00:00",
+    "count": 10
+  },
+  "result": [
+    {
+      "earthquake_id": "ABC123XYZ456",
+      "provider": "kandilli",
+      "title": "AKDENIZ",
+      "date": "2024.01.08 11:45:23",
+      "mag": 3.8,
+      "depth": 10.5,
+      "geojson": {
+        "type": "Point",
+        "coordinates": [30.5432, 36.1234]
+      },
+      "location_properties": {
+        "closestCity": {
+          "name": "Antalya",
+          "cityCode": 7,
+          "distance": 125430.5,
+          "population": 2619832
+        }
+      },
+      "date_time": "2024-01-08 11:45:23",
+      "created_at": 1704710723
+    }
+  ]
+}
+```
+
+---
+
+### 2️⃣ Kandilli - Arşiv
+
+**Endpoint:** `GET /deprem/kandilli/archive`
+
+**Açıklama:** Kandilli Rasathanesi'nden belirli tarih aralığındaki depremler.
+
+**Query Parametreleri:**
+- `date` (string, required): Başlangıç tarihi (YYYY-MM-DD)
+- `date_end` (string, optional): Bitiş tarihi (YYYY-MM-DD, default: bugün)
+- `skip` (number, optional): Atlanacak kayıt sayısı (default: 0)
+- `limit` (number, optional): Maksimum kayıt sayısı (default: 50, max: 100)
+
+**Örnek İstek:**
+```bash
+curl "https://api.orhanaydogdu.com.tr/deprem/kandilli/archive?date=2024-01-01&date_end=2024-01-31&limit=50"
+```
+
+**Örnek Response:**
+```json
+{
+  "status": true,
+  "httpStatus": 200,
+  "serverloadms": 28,
+  "metadata": {
+    "count": 50
+  },
+  "result": [
+    {
+      "earthquake_id": "DEF456GHI789",
+      "provider": "kandilli",
+      "title": "GEMLIK KORFEZI (BURSA)",
+      "mag": 4.2,
+      "depth": 8.7,
+      "date_time": "2024-01-15 14:23:11"
+    }
+  ]
+}
+```
+
+---
+
+### 3️⃣ AFAD - Canlı Veriler
+
+**Endpoint:** `GET /deprem/afad/live`
+
+**Açıklama:** AFAD'dan son 24 saatteki depremler.
+
+**Query Parametreleri:**
+- `skip` (number, optional): Atlanacak kayıt sayısı (default: 0)
+- `limit` (number, optional): Maksimum kayıt sayısı (default: 50, max: 100)
+
+**Örnek İstek:**
+```bash
+curl "https://api.orhanaydogdu.com.tr/deprem/afad/live?limit=20"
+```
+
+**Örnek Response:**
+```json
+{
+  "status": true,
+  "httpStatus": 200,
+  "serverloadms": 15,
+  "metadata": {
+    "date_starts": "2024-01-07 12:00:00",
+    "date_ends": "2024-01-08 12:00:00",
+    "count": 20
+  },
+  "result": [
+    {
+      "earthquake_id": "JKL789MNO012",
+      "provider": "afad",
+      "title": "AEGEAN SEA",
+      "mag": 3.5,
+      "depth": 7.2,
+      "date_time": "2024-01-08 10:30:15"
+    }
+  ]
+}
+```
+
+---
+
+### 4️⃣ AFAD - Arşiv
+
+**Endpoint:** `GET /deprem/afad/archive`
+
+**Açıklama:** AFAD'dan belirli tarih aralığındaki depremler.
+
+**Query Parametreleri:**
+- `date` (string, required): Başlangıç tarihi (YYYY-MM-DD)
+- `date_end` (string, optional): Bitiş tarihi (YYYY-MM-DD, default: bugün)
+- `skip` (number, optional): Atlanacak kayıt sayısı (default: 0)
+- `limit` (number, optional): Maksimum kayıt sayısı (default: 50, max: 100)
+
+**Örnek İstek:**
+```bash
+curl "https://api.orhanaydogdu.com.tr/deprem/afad/archive?date=2024-01-01&date_end=2024-01-10"
+```
+
+**Örnek Response:**
+```json
+{
+  "status": true,
+  "httpStatus": 200,
+  "serverloadms": 22,
+  "metadata": {
+    "count": 35
+  },
+  "result": [
+    {
+      "earthquake_id": "PQR345STU678",
+      "provider": "afad",
+      "title": "Ege Denizi",
+      "mag": 4.1,
+      "depth": 10.3,
+      "date_time": "2024-01-05 08:15:42"
+    }
+  ]
+}
+```
+
+---
+
+### 5️⃣ Tüm Kaynaklar (Kombine)
+
+**Endpoint:** `GET /deprem`
+
+**Açıklama:** Tüm veri kaynaklarından (Kandilli + AFAD) son 24 saatteki depremler.
+
+**Query Parametreleri:**
+- `date` (string, optional): Başlangıç tarihi (YYYY-MM-DD, default: 24 saat önce)
+- `date_end` (string, optional): Bitiş tarihi (YYYY-MM-DD, default: şimdi)
+- `skip` (number, optional): Atlanacak kayıt sayısı (default: 0)
+- `limit` (number, optional): Maksimum kayıt sayısı (default: 50, max: 100)
+
+**Örnek İstek:**
+```bash
+curl "https://api.orhanaydogdu.com.tr/deprem?limit=30"
+```
+
+**Örnek Response:**
+```json
+{
+  "status": true,
+  "httpStatus": 200,
+  "serverloadms": 18,
+  "result": [
+    {
+      "earthquake_id": "ABC123",
+      "provider": "kandilli",
+      "title": "MARMARA DENIZI",
+      "mag": 3.2,
+      "depth": 8.5,
+      "date_time": "2024-01-08 10:15:30"
+    },
+    {
+      "earthquake_id": "XYZ789",
+      "provider": "afad",
+      "title": "EGE DENIZI",
+      "mag": 2.8,
+      "depth": 6.2,
+      "date_time": "2024-01-08 09:45:12"
+    }
+  ]
+}
+```
+
+---
+
+### 6️⃣ Gelişmiş Arama
+
+**Endpoint:** `POST /deprem/data/search`
+
+**Açıklama:** Tüm depremler üzerinde gelişmiş filtreleme, konum bazlı arama ve sıralama.
+
+**Request Body:**
+```json
+{
+  "provider": "kandilli",  // optional: "kandilli" veya "afad" - kaynak filtresi
   "match": {
-    "mag": 4.0,              // Minimum büyüklük
-    "date_starts": "2024-01-01 00:00:00",
-    "date_ends": "2024-01-31 23:59:59",
-    "cityCode": 34           // Şehir plaka kodu
+    "mag": 4.0,              // optional: Minimum büyüklük
+    "cityCode": 34,          // optional: Şehir plaka kodu
+    "date_starts": "2024-01-01 00:00:00",  // optional: Başlangıç tarihi
+    "date_ends": "2024-01-31 23:59:59"     // optional: Bitiş tarihi
   },
   "geoNear": {
-    "lon": 29.0,             // Boylam
-    "lat": 41.0,             // Enlem
-    "radiusMeter": 100000    // Yarıçap (metre)
+    "lon": 29.0,             // optional: Boylam koordinatı
+    "lat": 41.0,             // optional: Enlem koordinatı
+    "radiusMeter": 100000    // optional: Yarıçap (metre)
   },
-  "sort": "date_-1",         // Sıralama: date_1, date_-1, mag_1, mag_-1
-  "skip": 0,
-  "limit": 100
+  "sort": "date_-1",         // optional: date_1, date_-1, mag_1, mag_-1
+  "skip": 0,                 // optional: Sayfalama offset
+  "limit": 100               // optional: Max kayıt (default: 100, max: 100 - otomatik sınırlanır)
+}
+```
+
+**Örnek 1 - Büyüklük Filtreleme:**
+```bash
+curl -X POST https://api.orhanaydogdu.com.tr/deprem/data/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "match": {"mag": 4.5},
+    "sort": "mag_-1",
+    "limit": 10
+  }'
+```
+
+**Örnek 2 - Konum Bazlı Arama (İstanbul çevresinde 200km):**
+```bash
+curl -X POST https://api.orhanaydogdu.com.tr/deprem/data/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "geoNear": {
+      "lon": 28.9784,
+      "lat": 41.0082,
+      "radiusMeter": 200000
+    },
+    "match": {"mag": 3.0},
+    "limit": 20
+  }'
+```
+
+**Örnek 3 - Şehir ve Tarih Filtresi:**
+```bash
+curl -X POST https://api.orhanaydogdu.com.tr/deprem/data/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "match": {
+      "cityCode": 6,
+      "mag": 3.0,
+      "date_starts": "2024-01-01 00:00:00",
+      "date_ends": "2024-01-31 23:59:59"
+    },
+    "sort": "date_-1"
+  }'
+```
+
+**Örnek 4 - Kaynak Filtresi (Sadece AFAD):**
+```bash
+curl -X POST https://api.orhanaydogdu.com.tr/deprem/data/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "provider": "afad",
+    "match": {"mag": 4.0},
+    "limit": 30
+  }'
+```
+
+**Örnek Response:**
+```json
+{
+  "status": true,
+  "httpStatus": 200,
+  "serverloadms": 35,
+  "result": [
+    {
+      "earthquake_id": "VWX901YZA234",
+      "provider": "kandilli",
+      "title": "MARMARA DENIZI",
+      "mag": 4.8,
+      "depth": 12.3,
+      "geojson": {
+        "type": "Point",
+        "coordinates": [28.5, 40.8]
+      },
+      "location_properties": {
+        "closestCity": {
+          "name": "İstanbul",
+          "cityCode": 34,
+          "distance": 45230.8,
+          "population": 15840900
+        },
+        "closestCities": [
+          {"name": "İstanbul", "cityCode": 34, "distance": 45230.8},
+          {"name": "Tekirdağ", "cityCode": 59, "distance": 67890.2}
+        ],
+        "airports": [
+          {
+            "name": "İstanbul Havalimanı",
+            "code": "IST",
+            "distance": 52340.5
+          }
+        ]
+      },
+      "date_time": "2024-01-15 14:23:11"
+    }
+  ],
+  "metadata": {
+    "total": 47,
+    "count": 10
+  }
+}
+```
+
+---
+
+### 7️⃣ Tekil Deprem Bilgisi
+
+**Endpoint:** `GET /deprem/data/get`
+
+**Açıklama:** Belirli bir earthquake_id'ye sahip depremin detaylı bilgisi.
+
+**Query Parametreleri:**
+- `earthquake_id` (string, required): Deprem ID'si
+
+**Örnek İstek:**
+```bash
+curl "https://api.orhanaydogdu.com.tr/deprem/data/get?earthquake_id=EoIrMsfMSC19f"
+```
+
+**Örnek Response:**
+```json
+{
+  "status": true,
+  "httpStatus": 200,
+  "result": {
+    "earthquake_id": "EoIrMsfMSC19f",
+    "provider": "kandilli",
+    "title": "CALIS-ELBISTAN (KAHRAMANMARAS)",
+    "date": "2023.03.08 02:54:44",
+    "mag": 4.2,
+    "depth": 5,
+    "geojson": {
+      "type": "Point",
+      "coordinates": [37.0132, 38.1355]
+    },
+    "location_properties": {
+      "closestCity": {
+        "name": "Kahramanmaraş",
+        "cityCode": 46,
+        "distance": 15234.56,
+        "population": 1177436
+      },
+      "epiCenter": {
+        "name": "Kahramanmaraş",
+        "cityCode": 46,
+        "population": 1177436
+      },
+      "airports": [
+        {
+          "distance": 66757.09,
+          "name": "Kahramanmaraş Havalimanı",
+          "code": "KCM"
+        }
+      ]
+    },
+    "date_time": "2023-03-08 02:54:44",
+    "created_at": 1678240484
+  }
+}
+```
+
+---
+
+### 8️⃣ Şehir Listesi
+
+**Endpoint:** `GET /deprem/statics/cities`
+
+**Açıklama:** Türkiye şehir listesi (plaka kodu, isim, nüfus).
+
+**Örnek İstek:**
+```bash
+curl "https://api.orhanaydogdu.com.tr/deprem/statics/cities"
+```
+
+**Örnek Response:**
+```json
+{
+  "status": true,
+  "httpStatus": 200,
+  "result": [
+    {
+      "cityCode": 1,
+      "name": "Adana",
+      "population": 2258718
+    },
+    {
+      "cityCode": 6,
+      "name": "Ankara",
+      "population": 5663322
+    },
+    {
+      "cityCode": 34,
+      "name": "İstanbul",
+      "population": 15840900
+    }
+  ]
+}
+```
+
+---
+
+### 9️⃣ API Sağlık Durumu
+
+**Endpoint:** `GET /deprem/status`
+
+**Açıklama:** API durumu, toplam deprem sayısı ve sistem bilgileri.
+
+**Örnek İstek:**
+```bash
+curl "https://api.orhanaydogdu.com.tr/deprem/status"
+```
+
+**Örnek Response:**
+```json
+{
+  "status": true,
+  "httpStatus": 200,
+  "result": {
+    "api_status": "online",
+    "total_earthquakes": 125847,
+    "last_update": "2024-01-08 12:45:30",
+    "uptime_seconds": 8642341
+  }
 }
 ```
 
@@ -300,189 +594,6 @@ npm run dev
 npm start
 ```
 
-## 📊 Veri Yapısı ve Örnekler
-
-### Başarılı Response Formatı
-
-```json
-{
-  "status": true,
-  "serverloadms": 45,
-  "desc": "success",
-  "result": [...],
-  "metadata": {
-    "total": 127,
-    "count": 10,
-    "date_starts": "2024-01-01 00:00:00",
-    "date_ends": "2024-01-01 23:59:59"
-  }
-}
-```
-
-### Hata Response Formatı
-
-```json
-{
-  "status": false,
-  "httpStatus": 429,
-  "desc": "Too Many Request in 1 minute! Requests limited in 1 minute maximum 100 times"
-}
-```
-
-### Deprem Objesi
-
-```json
-{
-  "earthquake_id": "EoIrMsfMSC19f",
-  "provider": "kandilli",
-  "title": "CALIS-ELBISTAN (KAHRAMANMARAS)",
-  "date": "2023.03.08 02:54:44",
-  "mag": 4.2,
-  "depth": 5,
-  "geojson": {
-    "type": "Point",
-    "coordinates": [37.0132, 38.1355]
-  },
-  "location_properties": {
-    "closestCity": {
-      "name": "Kahramanmaraş",
-      "cityCode": 46,
-      "distance": 15234.56,
-      "population": 1177436
-    },
-    "epiCenter": {
-      "name": "Kahramanmaraş",
-      "cityCode": 46,
-      "population": 1177436
-    },
-    "closestCities": [
-      {
-        "name": "Kahramanmaraş",
-        "cityCode": 46,
-        "distance": 15234.56,
-        "population": 1177436
-      }
-    ],
-    "airports": [
-      {
-        "distance": 66757.09,
-        "name": "Kahramanmaraş Havalimanı",
-        "code": "KCM",
-        "coordinates": {
-          "type": "Point",
-          "coordinates": [36.9473, 37.5374]
-        }
-      }
-    ]
-  },
-  "rev": null,
-  "date_time": "2023-03-08 02:54:44",
-  "created_at": 1678240484,
-  "location_tz": "Europe/Istanbul"
-}
-```
-
-### Örnek: /kandilli/live Response
-
-```json
-{
-  "status": true,
-  "serverloadms": 12,
-  "desc": "success",
-  "metadata": {
-    "date_starts": "2024-01-07 12:00:00",
-    "date_ends": "2024-01-08 12:00:00",
-    "total": 45,
-    "count": 10
-  },
-  "result": [
-    {
-      "earthquake_id": "ABC123XYZ456",
-      "provider": "kandilli",
-      "title": "AKDENIZ",
-      "date": "2024.01.08 11:45:23",
-      "mag": 3.8,
-      "depth": 10.5,
-      "geojson": {
-        "type": "Point",
-        "coordinates": [30.5432, 36.1234]
-      },
-      "location_properties": {
-        "closestCity": {
-          "name": "Antalya",
-          "cityCode": 7,
-          "distance": 125430.5,
-          "population": 2619832
-        },
-        "epiCenter": {
-          "name": null,
-          "cityCode": null,
-          "population": null
-        },
-        "closestCities": [
-          {
-            "name": "Antalya",
-            "cityCode": 7,
-            "distance": 125430.5,
-            "population": 2619832
-          },
-          {
-            "name": "Mersin",
-            "cityCode": 33,
-            "distance": 189234.7,
-            "population": 1916432
-          }
-        ],
-        "airports": [
-          {
-            "distance": 132567.8,
-            "name": "Antalya Havalimanı",
-            "code": "AYT",
-            "coordinates": {
-              "type": "Point",
-              "coordinates": [30.8005, 36.8987]
-            }
-          }
-        ]
-      },
-      "rev": null,
-      "date_time": "2024-01-08 11:45:23",
-      "created_at": 1704710723,
-      "location_tz": "Europe/Istanbul"
-    }
-  ]
-}
-```
-
-### Örnek: /data/search ile Şehir Bazlı Arama Response
-
-```json
-{
-  "status": true,
-  "serverloadms": 28,
-  "result": [
-    {
-      "earthquake_id": "DEF789GHI012",
-      "provider": "kandilli",
-      "title": "GEMLIK KORFEZI (BURSA)",
-      "mag": 4.2,
-      "depth": 8.7,
-      "location_properties": {
-        "closestCity": {
-          "name": "Bursa",
-          "cityCode": 16,
-          "distance": 23456.7,
-          "population": 3147818
-        }
-      }
-    }
-  ],
-  "metadata": {
-    "total": 3,
-    "count": 3
-  }
-}
-```
 
 ## 🔒 Rate Limiting
 
@@ -523,6 +634,7 @@ Tam lisans metni için [LICENSE](LICENSE) dosyasına bakınız.
 ## 🙏 Teşekkürler
 
 - Boğaziçi Üniversitesi Kandilli Rasathanesi ve Deprem Araştırma Enstitüsü'ne veri sağladıkları için teşekkürler.
+- AFAD (Afet ve Acil Durum Yönetimi Başkanlığı)'a veri sağladıkları için teşekkürler.
 - Bu API'yi kullanan ve geri bildirim sağlayan tüm geliştiricilere teşekkürler.
 
 ---
