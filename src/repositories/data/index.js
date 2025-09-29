@@ -66,7 +66,6 @@ module.exports.search = async (match = null, geoNear = null, sort = null, skip =
 	if (project) {
 		agg.push({ $project: project });
 	}
-	console.log(JSON.stringify(agg, null, 2));
 	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate(agg);
 	if (query.length > 0) {
 		return query;
