@@ -1,21 +1,51 @@
-MIT License
+Kandilli Rasathanesi API - Özel Lisans
 
-Copyright (c) 2019 Orhan AYDOĞDU
+Copyright (c) Orhan AYDOĞDU
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Bu yazılım ve ilgili dokümantasyon dosyalarının ("Yazılım") kullanımı aşağıdaki
+koşullara tabidir:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. TİCARİ OLMAYAN KULLANIM
+   - Bu yazılım, ticari olmayan, eğitim, araştırma ve kişisel amaçlar için
+     ücretsiz olarak kullanılabilir.
+   - Kaynak kodu görüntülenebilir, indirilebilir ve değiştirilebilir.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. TİCARİ KULLANIM KISITLAMASI
+   - Bu yazılımın ticari amaçlarla kullanımı, önceden yazılı izin alınmadan
+     kesinlikle yasaktır.
+   - Ticari kullanım için detaylı bilgi için info@orhanaydogdu.com.tr adresinden iletişime geçiniz.
+
+3. VERİ KULLANIMI VE TİCARİ KULLANIM
+   - API tarafından sağlanan deprem verileri, Boğaziçi Üniversitesi Kandilli
+     Rasathanesi ve Deprem Araştırma Enstitüsü'nün verilerine dayanmaktadır.
+   - Bu verilerin ticari kullanımı, Boğaziçi Üniversitesi Rektörlüğü'nün
+     yazılı izni olmadan yasaktır.
+
+4. API KULLANIM KOŞULLARI
+   - API kullanımı rate limiting'e tabidir (dakikada 40 istek).
+   - Aşırı kullanım durumunda erişim engellenebilir.
+   - API'nin sürekli erişilebilirliği garanti edilmez.
+
+5. ATTRİBÜSYON (ATIF)
+   - Bu yazılımı kullanan projeler, görünür bir şekilde aşağıdaki atfı
+     içermelidir:
+     "Deprem verileri Kandilli Rasathanesi API tarafından sağlanmaktadır."
+
+6. SORUMLULUK REDDİ
+   - Bu yazılım "OLDUĞU GİBİ" sağlanmaktadır, hiçbir garanti verilmemektedir.
+   - Yazılımın kullanımından doğabilecek hiçbir zarar veya kayıptan yazılım
+     sahibi sorumlu tutulamaz.
+   - Deprem verilerinin doğruluğu ve güncelliği konusunda garanti verilmez.
+
+7. DEĞİŞİKLİKLER
+   - Değiştirilmiş versiyonlar, orijinal olarak sunulamaz.
+   - Kaynak kodda yapılan değişiklikler belirtilmelidir.
+
+8. DAĞITIM
+   - Bu yazılımın yeniden dağıtımı, bu lisans koşullarını içermelidir.
+   - Ticari amaçlı dağıtım yasaktır.
+
+Bu lisans koşullarını kabul etmiyorsanız, bu yazılımı kullanmayınız.
+
+İletişim: info@orhanaydogdu.com.tr
+Web: https://api.orhanaydogdu.com.tr

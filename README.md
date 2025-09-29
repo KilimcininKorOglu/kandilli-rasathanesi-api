@@ -3,7 +3,7 @@
 <div align="center">
 
 [![API Status](https://img.shields.io/badge/API-Active-brightgreen)](https://api.orhanaydogdu.com.tr/deprem/status)
-[![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Custom-orange.svg)](LICENSE)
 [![Node Version](https://img.shields.io/badge/Node.js-%3E%3D14.0.0-green)](https://nodejs.org)
 [![MongoDB](https://img.shields.io/badge/MongoDB-6.0%2B-green)](https://www.mongodb.com/)
 
@@ -521,11 +521,25 @@ API'nin sürdürülebilirliği için rate limiting uygulanmaktadır:
 
 ## 📜 Lisans ve Uyarılar
 
-### Ticari Kullanım Uyarısı
-> ⚠️ **ÖNEMLİ**: Söz konusu bilgi, veri ve haritalar Boğaziçi Üniversitesi Rektörlüğü'nün yazılı izni ve onayı olmadan herhangi bir şekilde ticari amaçlı kullanılamaz.
+### 🔒 Lisans Koşulları
 
-### Lisans
-Bu proje ISC lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakınız.
+Bu proje **özel lisans** altında lisanslanmıştır:
+
+- ✅ **Ücretsiz Kullanım**: Eğitim, araştırma ve kişisel amaçlar için
+- ❌ **Ticari Kullanım**: Yazılı izin gerektirir
+- 📄 **Atribusyon**: Projenizde "Kandilli Rasathanesi API" referansı gerekli
+- 🚫 **Veri Ticareti**: Deprem verilerinin satışı yasaktır
+
+### ⚠️ Ticari Kullanım Uyarısı
+
+> **ÖNEMLİ UYARI**:
+> 1. Söz konusu bilgi, veri ve haritalar Boğaziçi Üniversitesi Rektörlüğü'nün yazılı izni olmadan ticari amaçlı kullanılamaz.
+> 2. API'nin ticari kullanımı için info@orhanaydogdu.com.tr adresinden detaylı bilgi ve izin alınmalıdır.
+> 3. İzinsiz ticari kullanım yasal işleme tabi olabilir.
+
+### 📝 Lisans Detayları
+
+Tam lisans metni için [LICENSE](LICENSE) dosyasına bakınız.
 
 ### İletişim
 - 📧 Email: info@orhanaydogdu.com.tr
