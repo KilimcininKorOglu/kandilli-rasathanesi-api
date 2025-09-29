@@ -1,0 +1,27 @@
+/* eslint-disable no-inner-declarations */
+const helpers = require('../../helpers');
+const repositories = require('../../repositories');
+const constants = require('../../constants');
+
+module.exports = async (req, res) => {
+	const responseBody = constants.response();
+	responseBody.serverloadms = new helpers.date.kk_date().format('x');
+	responseBody.metadata = {};
+	responseBody.result = [];
+	try {
+		const afad_data = await repositories.afad.list(req.query.date, req.query.date_end, req.query.skip, req.query.limit);
+		if (!afad_data) {
+			responseBody.status = false;
+			responseBody.desc = 'Veri alınamadı!';
+		}
+		responseBody.result = afad_data.data;
+		responseBody.metadata = afad_data.metadata[0];
+	} catch (error) {
+		console.error(error);
+		responseBody.desc = error.message || '';
+		responseBody.status = false;
+		responseBody.httpStatus = 500;
+	}
+	responseBody.serverloadms = new helpers.date.kk_date().format('x') - responseBody.serverloadms;
+	return res.status(responseBody.httpStatus).json(responseBody);
+};
