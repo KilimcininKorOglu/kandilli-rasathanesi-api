@@ -9,7 +9,7 @@
 
 **Türkiye'nin en güncel deprem verilerini sunan, ücretsiz ve açık kaynaklı API servisi**
 
-[API Dokümantasyonu](https://api.orhanaydogdu.com.tr/deprem/api-docs/) | [API Durumu](https://api.orhanaydogdu.com.tr/deprem/status) | [Whatsapp Topluluğu](https://chat.whatsapp.com/KOkShApC4lc9HlMtFFN3kQ)
+[🔗 Swagger Dokümantasyonu](https://api.orhanaydogdu.com.tr/deprem/api-docs/) | [📊 API Durumu](https://api.orhanaydogdu.com.tr/deprem/status) | [💬 Whatsapp Topluluğu](https://chat.whatsapp.com/KOkShApC4lc9HlMtFFN3kQ)
 
 </div>
 
@@ -218,6 +218,12 @@ $result = json_decode($response, true);
 ```
 
 ## 📚 API Endpoints
+
+### 📖 Swagger/OpenAPI Dokümantasyonu
+
+Detaylı API dokümantasyonu ve interaktif test arayüzü için:
+
+🔗 **[https://api.orhanaydogdu.com.tr/deprem/api-docs/](https://api.orhanaydogdu.com.tr/deprem/api-docs/)**
 
 ### Public Endpoints
 
