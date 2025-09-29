@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 
 logger.token('real-ip', (req) => req.ip);
-logger.token('datetime', () => new helpers.kk_date().format('YYYY-MM-DD HH:mm:ss'));
+logger.token('datetime', () => new helpers.date.kk_date().format('YYYY-MM-DD HH:mm:ss'));
 
 app.use(cors());
 app.use(logger(':datetime - :real-ip - :method :url :status :response-time ms'));

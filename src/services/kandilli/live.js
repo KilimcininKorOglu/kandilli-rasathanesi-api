@@ -6,10 +6,10 @@ const db = require('../../db');
 
 module.exports = async (req, res) => {
 	const responseBody = constants.response();
-	responseBody.serverloadms = helpers.date.moment.timestampMS();
+	responseBody.serverloadms = new helpers.date.kk_date().format('x');
 	responseBody.metadata = {
-		date_starts: helpers.date.moment.moment().tz('Europe/Istanbul').add(-24, 'hours').format('YYYY-MM-DD HH:mm:ss'),
-		date_ends: helpers.date.moment.moment().tz('Europe/Istanbul').format('YYYY-MM-DD HH:mm:ss'),
+		date_starts: new helpers.date.kk_date().add(-24, 'hours').format('YYYY-MM-DD HH:mm:ss'),
+		date_ends: new helpers.date.kk_date().format('YYYY-MM-DD HH:mm:ss'),
 	};
 	responseBody.result = [];
 
@@ -41,6 +41,6 @@ module.exports = async (req, res) => {
 		responseBody.status = false;
 		responseBody.httpStatus = 500;
 	}
-	responseBody.serverloadms = helpers.date.moment.timestampMS() - responseBody.serverloadms;
+	responseBody.serverloadms = new helpers.date.kk_date().format('x') - responseBody.serverloadms;
 	return res.status(responseBody.httpStatus).json(responseBody);
 };

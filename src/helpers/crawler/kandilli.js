@@ -12,11 +12,11 @@ module.exports.get = async (limit = null) => {
 		ignoreDeclaration: true,
 		ignorePiTags: true,
 		attributeNamePrefix: '@_',
-		isArray: (name, jpath) => {
+		isArray: (_name, jpath) => {
 			if (alwaysArray.indexOf(jpath) !== -1) return true;
 		},
 	});
-	const response = await axios.get(`${process.env.KANDILLI_XML}?v=${helpers.date.moment.timestampMS()}`);
+	const response = await axios.get(`${process.env.KANDILLI_XML}?v=${new helpers.date.kk_date().format('x')}`);
 	if (!response || !response.data) {
 		throw new constants.errors.ServerError('helpers.crawler.get', 'Kandilli fetch error !');
 	}
@@ -36,11 +36,11 @@ module.exports.getByDate = async (date) => {
 		ignoreDeclaration: true,
 		ignorePiTags: true,
 		attributeNamePrefix: '@_',
-		isArray: (name, jpath) => {
+		isArray: (_name, jpath) => {
 			if (alwaysArray.indexOf(jpath) !== -1) return true;
 		},
 	});
-	const response = await axios.get(`${process.env.KANDILLI_DATE_XML}${date}.xml?v=${helpers.date.moment.timestampMS()}`);
+	const response = await axios.get(`${process.env.KANDILLI_DATE_XML}${date}.xml?v=${new helpers.date.kk_date().format('x')}`);
 	if (!response || !response.data) {
 		throw new constants.errors.ServerError('helpers.crawler.getByDate', 'Kandilli fetch error !');
 	}

@@ -21,20 +21,20 @@ module.exports.check = async (ip) => {
 module.exports.count = async (ip) => {
 	return await new db.MongoDB.CRUD('earthquake', 'requests').count({
 		ip: `${ip}`,
-		created_at: { $gte: new helpers.kk_date().add(-1, 'minutes').format('X') },
+		created_at: { $gte: new helpers.date.kk_date().add(-1, 'minutes').format('X') },
 	});
 };
 
 module.exports.save = async (ip) => {
 	await new db.MongoDB.CRUD('earthquake', 'requests').insert({
 		ip: `${ip}`,
-		created_at: new helpers.kk_date().format('X'),
+		created_at: new helpers.date.kk_date().format('X'),
 	});
 	return true;
 };
 
 module.exports.delete = async () => {
-	new db.MongoDB.CRUD('earthquake', 'requests').delete({ created_at: { $lte: new helpers.kk_date().add(-1, 'minutes').format('X') } });
+	await new db.MongoDB.CRUD('earthquake', 'requests').delete({ created_at: { $lte: new helpers.date.kk_date().add(-1, 'minutes').format('X') } });
 	return true;
 };
 

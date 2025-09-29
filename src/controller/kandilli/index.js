@@ -47,8 +47,8 @@ module.exports.archive = async (req, res, next) => {
 		const query = {
 			skip: 0,
 			limit: 100,
-			date: helpers.date.moment.moment().tz('Europe/Istanbul').add(-24, 'hours').format('YYYY-MM-DD HH:mm:ss'),
-			date_end: helpers.date.moment.moment().tz('Europe/Istanbul').format('YYYY-MM-DD HH:mm:ss'),
+			date: new helpers.date.kk_date().add(-24, 'hours').format('YYYY-MM-DD HH:mm:ss'),
+			date_end: new helpers.date.kk_date().format('YYYY-MM-DD HH:mm:ss'),
 		};
 
 		await repositories.rate.check(req.ip);
@@ -71,17 +71,17 @@ module.exports.archive = async (req, res, next) => {
 
 		if (req.query.date && typeof req.query.date === 'string') {
 			req.query.date = req.query.date.toString();
-			if (!helpers.kk_date.isValid(req.query.date, 'YYYY-MM-DD')) {
+			if (!helpers.date.kk_date.isValid(req.query.date, 'YYYY-MM-DD')) {
 				throw new constants.errors.WrongParam('kandilli.archive', 'date wrong param !');
 			}
-			query.date = helpers.date.moment.moment(req.query.date).startOf('day').format('YYYY-MM-DD HH:mm:ss');
+			query.date = new helpers.date.kk_date(req.query.date).startOf('days').format('YYYY-MM-DD HH:mm:ss');
 		}
 		if (req.query.date_end && typeof req.query.date_end === 'string') {
 			req.query.date_end = req.query.date_end.toString();
-			if (!helpers.kk_date.isValid(req.query.date_end, 'YYYY-MM-DD')) {
+			if (!helpers.date.kk_date.isValid(req.query.date_end, 'YYYY-MM-DD')) {
 				throw new constants.errors.WrongParam('kandilli.archive', 'date_end wrong param !');
 			}
-			query.date_end = helpers.date.moment.moment(req.query.date_end).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+			query.date_end = new helpers.date.kk_date(req.query.date_end).endOf('days').format('YYYY-MM-DD HH:mm:ss');
 		}
 
 		req.query = query;

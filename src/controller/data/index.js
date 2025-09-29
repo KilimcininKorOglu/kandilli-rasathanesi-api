@@ -54,66 +54,66 @@ module.exports.statsGeneral = (req, res, next) => {
 		switch (req.body.range) {
 			case constants.statsRange.TODAY:
 				body.match.date_time = {
-					$gte: helpers.date.moment.moment().tz('Europe/Istanbul').startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-					$lte: helpers.date.moment.moment().tz('Europe/Istanbul').endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+					$gte: new helpers.date.kk_date().startOf('days').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: new helpers.date.kk_date().endOf('days').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
 			case constants.statsRange.YESTERDAY:
 				body.match.date_time = {
-					$gte: helpers.date.moment.moment().tz('Europe/Istanbul').add(-1, 'days').startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-					$lte: helpers.date.moment.moment().tz('Europe/Istanbul').add(-1, 'days').endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+					$gte: new helpers.date.kk_date().add(-1, 'days').startOf('days').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: new helpers.date.kk_date().add(-1, 'days').endOf('days').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
 			case constants.statsRange.LAST3DAYS:
 				body.match.date_time = {
-					$gte: helpers.date.moment.moment().tz('Europe/Istanbul').add(-3, 'days').startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-					$lte: helpers.date.moment.moment().tz('Europe/Istanbul').endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+					$gte: new helpers.date.kk_date().add(-3, 'days').startOf('days').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: new helpers.date.kk_date().endOf('days').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
 			case constants.statsRange.LAST5DAYS:
 				body.match.date_time = {
-					$gte: helpers.date.moment.moment().tz('Europe/Istanbul').add(-5, 'days').startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-					$lte: helpers.date.moment.moment().tz('Europe/Istanbul').endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+					$gte: new helpers.date.kk_date().add(-5, 'days').startOf('days').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: new helpers.date.kk_date().endOf('days').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
 			case constants.statsRange.LAST7DAYS:
 				body.match.date_time = {
-					$gte: helpers.date.moment.moment().tz('Europe/Istanbul').add(-7, 'days').startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-					$lte: helpers.date.moment.moment().tz('Europe/Istanbul').endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+					$gte: new helpers.date.kk_date().add(-7, 'days').startOf('days').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: new helpers.date.kk_date().endOf('days').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
 			case constants.statsRange.THISMONTH:
 				body.match.date_time = {
-					$gte: helpers.date.moment.moment().tz('Europe/Istanbul').startOf('month').format('YYYY-MM-DD HH:mm:ss'),
-					$lte: helpers.date.moment.moment().tz('Europe/Istanbul').endOf('month').format('YYYY-MM-DD HH:mm:ss'),
+					$gte: new helpers.date.kk_date().startOf('months').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: new helpers.date.kk_date().endOf('months').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
 			case constants.statsRange.LASTMONTH:
 				body.match.date_time = {
-					$gte: helpers.date.moment.moment().tz('Europe/Istanbul').add(-1, 'month').startOf('month').format('YYYY-MM-DD HH:mm:ss'),
-					$lte: helpers.date.moment.moment().tz('Europe/Istanbul').add(-1, 'month').endOf('month').format('YYYY-MM-DD HH:mm:ss'),
+					$gte: new helpers.date.kk_date().add(-1, 'month').startOf('months').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: new helpers.date.kk_date().add(-1, 'month').endOf('months').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
 			case constants.statsRange.LAST2MONTHS:
 				body.match.date_time = {
-					$gte: helpers.date.moment.moment().tz('Europe/Istanbul').add(-2, 'month').startOf('month').format('YYYY-MM-DD HH:mm:ss'),
-					$lte: helpers.date.moment.moment().tz('Europe/Istanbul').endOf('month').format('YYYY-MM-DD HH:mm:ss'),
+					$gte: new helpers.date.kk_date().add(-2, 'month').startOf('months').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: new helpers.date.kk_date().endOf('months').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
 			case constants.statsRange.LAST3MONTHS:
 				body.match.date_time = {
-					$gte: helpers.date.moment.moment().tz('Europe/Istanbul').add(-3, 'month').startOf('month').format('YYYY-MM-DD HH:mm:ss'),
-					$lte: helpers.date.moment.moment().tz('Europe/Istanbul').endOf('month').format('YYYY-MM-DD HH:mm:ss'),
+					$gte: new helpers.date.kk_date().add(-3, 'month').startOf('months').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: new helpers.date.kk_date().endOf('months').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
 			case constants.statsRange.DATE: {
-				const total = new helpers.kk_date(body.date.starts_date).diff(body.date.ends_date, 'days');
+				const total = new helpers.date.kk_date(body.date.starts_date).diff(body.date.ends_date, 'days');
 				if (total > 7) {
 					throw new constants.errors.WrongParam('data.statsGeneral', 'date range cant be big than 7 days !');
 				}
 				body.match.date_time = {
-					$gte: helpers.date.moment.moment(body.date.starts_date).tz('Europe/Istanbul').startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-					$lte: helpers.date.moment.moment(body.date.ends_date).endOf('day').tz('Europe/Istanbul').format('YYYY-MM-DD HH:mm:ss'),
+					$gte: new helpers.date.kk_date(body.date.starts_date).startOf('days').format('YYYY-MM-DD HH:mm:ss'),
+					$lte: new helpers.date.kk_date(body.date.ends_date).endOf('days').format('YYYY-MM-DD HH:mm:ss'),
 				};
 				break;
 			}
@@ -202,14 +202,14 @@ module.exports.search = (req, res, next) => {
 			}
 			if (typeof req.body.match.date_starts === 'string' && typeof req.body.match.date_ends === 'string') {
 				if (
-					!helpers.kk_date.isValid(req.body.match.date_starts, 'YYYY-MM-DD HH:mm:ss') ||
-					!helpers.kk_date.isValid(req.body.match.date_ends, 'YYYY-MM-DD HH:mm:ss')
+					!helpers.date.kk_date.isValid(req.body.match.date_starts, 'YYYY-MM-DD HH:mm:ss') ||
+					!helpers.date.kk_date.isValid(req.body.match.date_ends, 'YYYY-MM-DD HH:mm:ss')
 				) {
 					throw new constants.errors.WrongParam('data.search', 'date_starts or date_ends is not valid !');
 				}
 				body.match.date_time = {
-					$gte: req.body.search.date_starts.toStrings(),
-					$lte: req.body.match.date_ends.toStrings(),
+					$gte: req.body.match.date_starts.toString(),
+					$lte: req.body.match.date_ends.toString(),
 				};
 			}
 

@@ -7,7 +7,7 @@ const repositories = require('../../repositories');
 module.exports = async (req, res) => {
 	const responseBody = constants.response();
 	responseBody.httpStatus = 404;
-	responseBody.serverloadms = helpers.date.moment.timestampMS();
+	responseBody.serverloadms = new helpers.date.kk_date().format('x');
 	responseBody.result = null;
 
 	try {
@@ -65,6 +65,6 @@ module.exports = async (req, res) => {
 		responseBody.status = false;
 		responseBody.httpStatus = 500;
 	}
-	responseBody.serverloadms = helpers.date.moment.timestampMS() - responseBody.serverloadms;
+	responseBody.serverloadms = new helpers.date.kk_date().format('x') - responseBody.serverloadms;
 	return res.status(responseBody.httpStatus).json(responseBody);
 };

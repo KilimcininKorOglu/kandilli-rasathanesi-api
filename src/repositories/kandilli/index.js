@@ -1,6 +1,5 @@
 const db = require('../../db');
 const helpers = require('../../helpers');
-const constants = require('../../constants');
 
 module.exports.multiSave = async (data, collection = 'data_v2') => {
 	if (data.length < 1) {
@@ -53,18 +52,15 @@ module.exports.update = async (earhquake_id, update) => {
 };
 
 module.exports.list = async (
-	date_starts = helpers.date.moment.moment().tz('Europe/Istanbul').add(-24, 'hours').format('YYYY-MM-DD HH:mm:ss'),
-	date_ends = helpers.date.moment.moment().tz('Europe/Istanbul').format('YYYY-MM-DD HH:mm:ss'),
+	date_starts = new helpers.date.kk_date().add(-24, 'hours').format('YYYY-MM-DD HH:mm:ss'),
+	date_ends = new helpers.date.kk_date().format('YYYY-MM-DD HH:mm:ss'),
 	skip = 0,
 	limit = 0,
 	sort = null,
 ) => {
-	const match = { date_time: { $gte: date_starts, $lte: date_ends } };
-	const agg = [];
-	const agg2 = [];
-	agg2.push({ $match: match });
+	const agg = [{ $match: { date_time: { $gte: date_starts, $lte: date_ends } } }];
 	if (sort) {
-		agg2.push({ $sort: sort });
+		agg.push({ $sort: sort });
 	}
 	if (skip > 0) {
 		agg.push({ $skip: skip });
@@ -72,17 +68,9 @@ module.exports.list = async (
 	if (limit > 0) {
 		agg.push({ $limit: limit });
 	}
-	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate([
-		...agg2,
-		{
-			$facet: {
-				data: agg,
-				metadata: [{ $count: 'total' }],
-			},
-		},
-	]);
+	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate(agg);
 	if (query.length > 0) {
-		return query[0];
+		return { data: query, metadata: [{ count: query.length }] };
 	}
-	return { data: [], metadata: [] };
+	return { data: [], metadata: [{ count: 0 }] };
 };

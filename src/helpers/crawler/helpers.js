@@ -23,7 +23,6 @@ module.exports.kandilli_models = (data, limit = null) => {
 				earthquake_id: db.MongoDB.id(),
 				provider: 'kandilli',
 				title: data[index]['@_lokasyon'],
-				date: data[index]['@_name'],
 				mag: parseFloat(data[index]['@_mag']),
 				depth: parseFloat(data[index]['@_Depth']),
 				geojson: {
@@ -32,8 +31,8 @@ module.exports.kandilli_models = (data, limit = null) => {
 				},
 				location_properties: helpers_crawler.earthquakes.location_properties(data[index]['@_lng'], data[index]['@_lat']),
 				rev,
-				date_time: helpers.date.moment.moment(data[index]['@_name'], 'Y.M.D HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'),
-				created_at: parseInt(helpers.date.moment.moment(data[index]['@_name'], 'Y.M.D HH:mm:ss').format('X'), 10),
+				date_time: new helpers.date.kk_date(data[index]['@_name']).format('YYYY-MM-DD HH:mm:ss'),
+				created_at: parseInt(new helpers.date.kk_date(data[index]['@_name']).format('X'), 10),
 				location_tz: 'Europe/Istanbul',
 			});
 		}

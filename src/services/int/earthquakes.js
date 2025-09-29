@@ -3,9 +3,9 @@ const helpers = require('../../helpers');
 const repositories = require('../../repositories');
 const constants = require('../../constants');
 
-module.exports = async (req, res) => {
+module.exports = async (_req, res) => {
 	const responseBody = constants.response();
-	responseBody.serverloadms = helpers.date.moment.timestampMS();
+	responseBody.serverloadms = new helpers.date.kk_date().format('x');
 
 	try {
 		async function start() {
@@ -23,6 +23,6 @@ module.exports = async (req, res) => {
 		responseBody.status = false;
 		responseBody.httpStatus = 500;
 	}
-	responseBody.serverloadms = helpers.date.moment.timestampMS() - responseBody.serverloadms;
+	responseBody.serverloadms = new helpers.date.kk_date().format('x') - responseBody.serverloadms;
 	return res.status(responseBody.httpStatus).json(responseBody);
 };
