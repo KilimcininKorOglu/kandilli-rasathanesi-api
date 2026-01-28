@@ -7,9 +7,12 @@
 		"start": "NODE_ENV=PROD pm2 start index.js --name kandilli-service -i 4",
 		"start:internal": "NODE_ENV=PROD pm2 start index-internal.js --name kandilli-internal -i 1",
 		"start:all": "npm run start && npm run start:internal",
-		"dev": "NODE_ENV=DEV pm2 start index.js --name kandilli-service-dev -i 1 --watch",
-		"dev:internal": "NODE_ENV=DEV pm2 start index-internal.js --name kandilli-internal-dev -i 1 --watch",
-		"dev:all": "npm run dev && npm run dev:internal",
+		"dev": "NODE_ENV=DEV node index.js",
+		"dev:internal": "NODE_ENV=DEV node index-internal.js",
+		"dev:all": "concurrently --names \"API,CRON\" -c \"blue,green\" \"npm run dev\" \"npm run dev:internal\"",
+		"pm2:dev": "NODE_ENV=DEV pm2 start index.js --name kandilli-service-dev -i 1 --watch",
+		"pm2:dev:internal": "NODE_ENV=DEV pm2 start index-internal.js --name kandilli-internal-dev -i 1 --watch",
+		"pm2:dev:all": "npm run pm2:dev && npm run pm2:dev:internal",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
@@ -40,6 +43,7 @@
 		"pg": "^8.17.2"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.2.3"
+		"@biomejs/biome": "2.2.3",
+		"concurrently": "^9.2.1"
 	}
 }
