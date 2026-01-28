@@ -9,7 +9,7 @@ const port = 7980;
 
 // connectors for db, cache etc.;
 async function connector() {
-	await db.MongoDB.connector();
+	await db.PostgreSQL.connector();
 }
 
 connector();

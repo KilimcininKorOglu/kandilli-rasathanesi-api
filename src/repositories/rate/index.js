@@ -19,14 +19,14 @@ module.exports.check = async (ip) => {
 };
 
 module.exports.count = async (ip) => {
-	return await new db.MongoDB.CRUD('earthquake', 'requests').count({
+	return await new db.PostgreSQL.CRUD('earthquake', 'requests').count({
 		ip: `${ip}`,
 		created_at: { $gte: new helpers.date.kk_date().add(-1, 'minutes').format('X') },
 	});
 };
 
 module.exports.save = async (ip) => {
-	await new db.MongoDB.CRUD('earthquake', 'requests').insert({
+	await new db.PostgreSQL.CRUD('earthquake', 'requests').insert({
 		ip: `${ip}`,
 		created_at: new helpers.date.kk_date().format('X'),
 	});
@@ -34,39 +34,23 @@ module.exports.save = async (ip) => {
 };
 
 module.exports.delete = async () => {
-	await new db.MongoDB.CRUD('earthquake', 'requests').delete({ created_at: { $lte: new helpers.date.kk_date().add(-1, 'minutes').format('X') } });
+	await new db.PostgreSQL.CRUD('earthquake', 'requests').delete({ created_at: { $lte: new helpers.date.kk_date().add(-1, 'minutes').format('X') } });
 	return true;
 };
 
 module.exports.stats = async () => {
 	const result = {
-		total_request_ip: 0,
-		total_request: 0,
+		totalRequestIp: 0,
+		totalRequest: 0,
 	};
-	const data = await new db.MongoDB.CRUD('earthquake', 'requests').aggregate([
-		{
-			$group: {
-				_id: '$ip',
-				total: {
-					$sum: 1,
-				},
-			},
-		},
-		{
-			$group: {
-				_id: null,
-				total_ip: {
-					$sum: 1,
-				},
-				total: {
-					$sum: '$total',
-				},
-			},
-		},
-	]);
+	const crud = new db.PostgreSQL.CRUD('earthquake', 'requests');
+	const data = await crud.raw(`
+		SELECT COUNT(DISTINCT ip) as total_ip, COUNT(*) as total 
+		FROM "earthquake"."requests"
+	`);
 	if (data.length > 0) {
-		result.total_request_ip = data[0].total_ip;
-		result.total_request = data[0].total;
+		result.totalRequestIp = parseInt(data[0].total_ip, 10) || 0;
+		result.totalRequest = parseInt(data[0].total, 10) || 0;
 	}
 	return result;
 };

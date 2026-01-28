@@ -7,8 +7,8 @@ module.exports.multiSave = async (data, collection = 'data_v2') => {
 		return true;
 	}
 	const mustInsert = [];
-	const data_length = data.length;
-	for (let index = 0; index < data_length; index++) {
+	const dataLength = data.length;
+	for (let index = 0; index < dataLength; index++) {
 		if (Number.isNaN(data[index].mag)) {
 			continue;
 		}
@@ -27,22 +27,19 @@ module.exports.multiSave = async (data, collection = 'data_v2') => {
 	if (mustInsert.length < 1) {
 		return true;
 	}
-	await new db.MongoDB.CRUD('earthquake', collection).insertMany(mustInsert);
+	await new db.PostgreSQL.CRUD('earthquake', collection).insertMany(mustInsert);
 	return true;
 };
 
-module.exports.checkIsInserted = async (provider, date_time, mag, depth, lng, lat) => {
-	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').find(
-		{
-			provider,
-			date_time,
-			mag,
-			depth,
-			'geojson.coordinates.0': lng,
-			'geojson.coordinates.1': lat,
-		},
-		[0, 1],
-		{ _id: false, date_time: true },
+module.exports.checkIsInserted = async (provider, dateTime, mag, depth, lng, lat) => {
+	const crud = new db.PostgreSQL.CRUD('earthquake', 'data_v2');
+	const query = await crud.raw(
+		`SELECT date_time FROM "earthquake"."data_v2" 
+		WHERE provider = $1 AND date_time = $2 AND mag = $3 AND depth = $4 
+		AND (geojson->>'coordinates')::jsonb->>0 = $5 
+		AND (geojson->>'coordinates')::jsonb->>1 = $6 
+		LIMIT 1`,
+		[provider, dateTime, mag, depth, String(lng), String(lat)],
 	);
 	if (query.length > 0) {
 		return true;
@@ -66,16 +63,16 @@ module.exports.search = async (match = null, geoNear = null, sort = null, skip =
 	if (project) {
 		agg.push({ $project: project });
 	}
-	const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').aggregate(agg);
+	const query = await new db.PostgreSQL.CRUD('earthquake', 'data_v2').aggregate(agg);
 	if (query.length > 0) {
 		return query;
 	}
 	return [];
 };
 
-module.exports.get = async (earthquake_id, project = {}) => {
+module.exports.get = async (earthquakeId, project = {}) => {
 	try {
-		const query = await new db.MongoDB.CRUD('earthquake', 'data_v2').find({ earthquake_id }, [0, 1], project);
+		const query = await new db.PostgreSQL.CRUD('earthquake', 'data_v2').find({ earthquake_id: earthquakeId }, [0, 1], project);
 		if (query.length > 0) {
 			return query[0];
 		}
