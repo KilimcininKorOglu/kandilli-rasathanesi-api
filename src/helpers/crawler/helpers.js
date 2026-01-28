@@ -1,78 +1,79 @@
 const helpers = require('../../helpers');
 const db = require('../../db');
 const constants = require('../../constants');
-const helpers_crawler = require('../index');
+const helpersCrawler = require('../index');
 
-module.exports.kandilli_models = (data, limit = null) => {
+module.exports.kandilliModels = (data, limit = null) => {
 	try {
-		const model_data = [];
-		const data_length = data.length;
-		for (let index = 0; index < data_length; index++) {
+		const modelData = [];
+		const dataLength = data.length;
+		for (let index = 0; index < dataLength; index++) {
 			if (limit && index + 1 > limit) {
 				break;
 			}
 			let rev = null;
-			data[index]['@_lokasyon'] = data[index]['@_lokasyon'].trim();
-			const splitted = data[index]['@_lokasyon'].split(')');
+			const title = data[index].title.trim();
+			const splitted = title.split(')');
+			let finalTitle = title;
 			if (splitted && splitted.length > 2) {
-				data[index]['@_lokasyon'] = `${splitted[0]})`;
+				finalTitle = `${splitted[0]})`;
 				rev = `${splitted[1]})`.trim();
 			}
-			data[index]['@_lng'] = parseFloat(data[index]['@_lng']);
-			data[index]['@_lat'] = parseFloat(data[index]['@_lat']);
-			model_data.push({
-				earthquake_id: db.MongoDB.id(),
+			const lng = parseFloat(data[index].lng);
+			const lat = parseFloat(data[index].lat);
+			modelData.push({
+				earthquake_id: db.PostgreSQL.id(),
 				provider: constants.providers.KANDILLI,
-				title: data[index]['@_lokasyon'],
-				mag: parseFloat(data[index]['@_mag']),
-				depth: parseFloat(data[index]['@_Depth']),
+				title: finalTitle,
+				mag: parseFloat(data[index].mag),
+				depth: parseFloat(data[index].depth),
 				geojson: {
 					type: 'Point',
-					coordinates: [data[index]['@_lng'], data[index]['@_lat']],
+					coordinates: [lng, lat],
 				},
-				location_properties: helpers_crawler.earthquakes.location_properties(data[index]['@_lng'], data[index]['@_lat']),
+				location_properties: helpersCrawler.earthquakes.location_properties(lng, lat),
 				rev,
-				date_time: new helpers.date.kk_date(data[index]['@_name']).format('YYYY-MM-DD HH:mm:ss'),
-				created_at: parseInt(new helpers.date.kk_date(data[index]['@_name']).format('X'), 10),
+				date_time: new helpers.date.kk_date(data[index].date).format('YYYY-MM-DD HH:mm:ss'),
+				created_at: parseInt(new helpers.date.kk_date(data[index].date).format('X'), 10),
 				location_tz: 'Europe/Istanbul',
 			});
 		}
-		return { data: model_data, metadata: { total: data.length } };
+		return { data: modelData, metadata: { total: data.length } };
 	} catch (error) {
 		console.error(error);
 		return { data: [], metadata: { total: 0 } };
 	}
 };
 
-module.exports.afad_models = (data, limit = null) => {
+module.exports.afadModels = (data, limit = null) => {
 	try {
-		const model_data = [];
-		const data_length = data.length;
-		for (let index = 0; index < data_length; index++) {
+		const modelData = [];
+		const dataLength = data.length;
+		for (let index = 0; index < dataLength; index++) {
 			if (limit && index + 1 > limit) {
 				break;
 			}
-			data[index]['location'] = data[index]['location'].trim();
-			data[index]['longitude'] = parseFloat(data[index]['longitude']);
-			data[index]['latitude'] = parseFloat(data[index]['latitude']);
-			model_data.push({
-				earthquake_id: db.MongoDB.id(),
+			const location = data[index].location.trim();
+			const lng = parseFloat(data[index].longitude);
+			const lat = parseFloat(data[index].latitude);
+			modelData.push({
+				earthquake_id: db.PostgreSQL.id(),
 				provider: constants.providers.AFAD,
-				title: data[index]['location'],
-				mag: parseFloat(data[index]['magnitude']),
-				depth: parseFloat(data[index]['depth']),
+				title: location,
+				mag: parseFloat(data[index].magnitude),
+				depth: parseFloat(data[index].depth),
 				geojson: {
 					type: 'Point',
-					coordinates: [data[index]['longitude'], data[index]['latitude']],
+					coordinates: [lng, lat],
 				},
-				location_properties: helpers_crawler.earthquakes.location_properties(data[index]['longitude'], data[index]['latitude']),
+				location_properties: helpersCrawler.earthquakes.location_properties(lng, lat),
 				rev: null,
-				date_time: new helpers.date.kk_date(data[index]['eventDate']).add(3, 'hours').format('YYYY-MM-DD HH:mm:ss'),
-				created_at: parseInt(new helpers.date.kk_date(data[index]['eventDate']).add(3, 'hours').format('X'), 10),
+				date_time: new helpers.date.kk_date(data[index].eventDate).add(3, 'hours').format('YYYY-MM-DD HH:mm:ss'),
+				created_at: parseInt(new helpers.date.kk_date(data[index].eventDate).add(3, 'hours').format('X'), 10),
 				location_tz: 'Europe/Istanbul',
 			});
 		}
-		return { data: model_data, metadata: { total: data.length } };
+		return { data: modelData, metadata: { total: data.length } };
 	} catch (error) {
 		console.error(error);
 		return { data: [], metadata: { total: 0 } };

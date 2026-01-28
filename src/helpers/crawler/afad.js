@@ -1,46 +1,43 @@
 const axios = require('axios');
-const helpers_crawler = require('./helpers');
+const helpersCrawler = require('./helpers');
 
-module.exports.get = async (starts, ends) => {
+module.exports.get = async (starts, ends, take = 100) => {
 	try {
-		const data = JSON.stringify({
+		const requestData = {
 			EventSearchFilterList: [
 				{
-					FilterType: 9,
-					Value: `${ends}T21:00:00.917Z`,
+					FilterType: 8,
+					Value: `${starts}T00:00:00.000Z`,
 				},
 				{
-					FilterType: 8,
-					Value: `${starts}T21:00:00.917Z`,
+					FilterType: 9,
+					Value: `${ends}T23:59:59.000Z`,
 				},
 			],
 			Skip: 0,
-			Take: 20,
+			Take: take,
 			SortDescriptor: {
 				field: 'eventDate',
 				dir: 'desc',
 			},
-		});
+		};
 
-		const config = {
-			method: 'post',
-			maxBodyLength: Infinity,
-			url: process.env.AFAD_API,
+		const response = await axios.post(process.env.AFAD_API, requestData, {
 			headers: {
-				Accept: 'application/json, text/plain, */*',
+				Accept: 'application/json',
 				'Content-Type': 'application/json',
 				Origin: 'https://deprem.afad.gov.tr',
 				Referer: 'https://deprem.afad.gov.tr/last-earthquakes',
 			},
-			data: data,
-		};
-		const request = await axios.request(config);
-		if (request && typeof request.data === 'object' && Array.isArray(request.data.eventList)) {
-			return helpers_crawler.afad_models(request.data.eventList);
+			timeout: 10000,
+		});
+
+		if (response && response.data && Array.isArray(response.data.eventList)) {
+			return helpersCrawler.afadModels(response.data.eventList);
 		}
 		return { data: [], metadata: { total: 0 } };
 	} catch (error) {
-		console.error(error);
+		console.error('AFAD crawler error:', error.message);
 		return { data: [], metadata: { total: 0 } };
 	}
 };
