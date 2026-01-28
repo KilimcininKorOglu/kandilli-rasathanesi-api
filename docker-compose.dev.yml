@@ -1,0 +1,86 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kandilli-api-dev
+    ports:
+      - "7979:7979"
+    environment:
+      - NODE_ENV=DEV
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=${POSTGRES_DB}
+      - KANDILLI_URL=${KANDILLI_URL:-http://www.koeri.boun.edu.tr/scripts/lst0.asp}
+      - AFAD_API=${AFAD_API:-https://deprem.afad.gov.tr/EventData/GetEventsByFilter}
+      - CRON_KEY=${CRON_KEY}
+      - STATS_KEY=${STATS_KEY}
+      - BYPASS_IPS=${BYPASS_IPS:-127.0.0.1}
+      - REQUEST_TIMEOUT_MS=${REQUEST_TIMEOUT_MS:-30000}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: ["node", "index.js"]
+    networks:
+      - kandilli-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  cron:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kandilli-cron-dev
+    ports:
+      - "7980:7980"
+    environment:
+      - NODE_ENV=DEV
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=${POSTGRES_DB}
+      - KANDILLI_URL=${KANDILLI_URL:-http://www.koeri.boun.edu.tr/scripts/lst0.asp}
+      - AFAD_API=${AFAD_API:-https://deprem.afad.gov.tr/EventData/GetEventsByFilter}
+      - CRON_KEY=${CRON_KEY}
+      - STATS_KEY=${STATS_KEY}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: ["node", "index-internal.js"]
+    networks:
+      - kandilli-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: kandilli-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASS}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    networks:
+      - kandilli-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  kandilli-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

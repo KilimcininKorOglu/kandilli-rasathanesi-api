@@ -1,0 +1,60 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kandilli-api
+    restart: unless-stopped
+    ports:
+      - "7979:7979"
+    environment:
+      - NODE_ENV=PROD
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - KANDILLI_URL=${KANDILLI_URL:-http://www.koeri.boun.edu.tr/scripts/lst0.asp}
+      - AFAD_API=${AFAD_API:-https://deprem.afad.gov.tr/EventData/GetEventsByFilter}
+      - CRON_KEY=${CRON_KEY}
+      - STATS_KEY=${STATS_KEY}
+      - BYPASS_IPS=${BYPASS_IPS:-127.0.0.1}
+      - REQUEST_TIMEOUT_MS=${REQUEST_TIMEOUT_MS:-30000}
+    networks:
+      - kandilli-network
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:7979/deprem/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  cron:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kandilli-cron
+    restart: unless-stopped
+    command: ["dumb-init", "node", "index-internal.js"]
+    ports:
+      - "7980:7980"
+    environment:
+      - NODE_ENV=PROD
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - KANDILLI_URL=${KANDILLI_URL:-http://www.koeri.boun.edu.tr/scripts/lst0.asp}
+      - AFAD_API=${AFAD_API:-https://deprem.afad.gov.tr/EventData/GetEventsByFilter}
+      - CRON_KEY=${CRON_KEY}
+      - STATS_KEY=${STATS_KEY}
+    networks:
+      - kandilli-network
+    depends_on:
+      api:
+        condition: service_healthy
+
+networks:
+  kandilli-network:
+    driver: bridge
