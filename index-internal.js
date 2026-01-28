@@ -1,10 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
+const cron = require('node-cron');
 
 const app = express();
 const helpers = require('./src/helpers');
 const db = require('./src/db');
+const repositories = require('./src/repositories');
+const kandilliCrawler = require('./src/helpers/crawler/kandilli');
+const afadCrawler = require('./src/helpers/crawler/afad');
 const port = 7980;
 
 // connectors for db, cache etc.;
@@ -68,6 +72,42 @@ app.use((_req, res) => {
 	return res.status(response.httpStatus).json(response);
 });
 
+// Earthquake data fetcher function
+async function fetchEarthquakeData() {
+	const now = new helpers.date.kk_date();
+	const today = now.format('YYYY-MM-DD');
+	const yesterday = now.add(-1, 'days').format('YYYY-MM-DD');
+
+	try {
+		console.log(`[${now.format('YYYY-MM-DD HH:mm:ss')}] Fetching earthquake data...`);
+
+		// Fetch from Kandilli
+		const kandilliResult = await kandilliCrawler.get();
+		if (kandilliResult.data.length > 0) {
+			await repositories.data.multiSave(kandilliResult.data);
+			console.log(`  Kandilli: ${kandilliResult.data.length} earthquakes processed`);
+		}
+
+		// Fetch from AFAD
+		const afadResult = await afadCrawler.get(yesterday, today, 100);
+		if (afadResult.data.length > 0) {
+			await repositories.data.multiSave(afadResult.data);
+			console.log(`  AFAD: ${afadResult.data.length} earthquakes processed`);
+		}
+
+		console.log(`[${new helpers.date.kk_date().format('YYYY-MM-DD HH:mm:ss')}] Fetch completed`);
+	} catch (error) {
+		console.error('Earthquake fetch error:', error.message);
+	}
+}
+
+// Run cron job every minute
+cron.schedule('* * * * *', fetchEarthquakeData);
+
+// Run once on startup after DB connection
+setTimeout(fetchEarthquakeData, 3000);
+
 app.listen(port, () => {
 	console.log(`Kandilli Internal Service - PORT: ${port}`);
+	console.log('Cron job scheduled: fetching earthquakes every minute');
 });

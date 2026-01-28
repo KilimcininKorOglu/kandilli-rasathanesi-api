@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS earthquake.data_v2 (
     location_properties JSONB,
     date_time TIMESTAMP NOT NULL,
     created_at BIGINT,
-    rev INTEGER DEFAULT 0,
+    rev VARCHAR(100),
+    location_tz VARCHAR(50) DEFAULT 'Europe/Istanbul',
     
     CONSTRAINT chk_provider CHECK (provider IN ('kandilli', 'afad'))
 );
