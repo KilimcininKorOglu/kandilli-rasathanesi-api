@@ -130,19 +130,19 @@ Endpoint: `GET /deprem/status`
 
 ## Ortam Degiskenleri
 
-| Degisken | Zorunlu | Varsayilan | Aciklama |
-|----------|---------|------------|----------|
-| `POSTGRES_USER` | Evet | - | PostgreSQL kullanici adi |
-| `POSTGRES_PASS` | Evet | - | PostgreSQL sifre |
-| `POSTGRES_HOST` | Evet | - | PostgreSQL host |
-| `POSTGRES_PORT` | Hayir | 5432 | PostgreSQL port |
-| `POSTGRES_DB` | Evet | - | PostgreSQL veritabani |
-| `KANDILLI_URL` | Hayir | koeri.boun.edu.tr/... | Kandilli API URL |
-| `AFAD_API` | Hayir | deprem.afad.gov.tr/... | AFAD API URL |
-| `CRON_KEY` | Hayir | - | Cron endpoint auth key |
-| `STATS_KEY` | Hayir | - | Stats endpoint auth key |
-| `BYPASS_IPS` | Hayir | 127.0.0.1 | Rate limit bypass IP'ler |
-| `REQUEST_TIMEOUT_MS` | Hayir | 30000 | Request timeout (ms) |
+| Degisken             | Zorunlu | Varsayilan             | Aciklama                 |
+|----------------------|---------|------------------------|--------------------------|
+| `POSTGRES_USER`      | Evet    | -                      | PostgreSQL kullanici adi |
+| `POSTGRES_PASS`      | Evet    | -                      | PostgreSQL sifre         |
+| `POSTGRES_HOST`      | Evet    | -                      | PostgreSQL host          |
+| `POSTGRES_PORT`      | Hayir   | 5432                   | PostgreSQL port          |
+| `POSTGRES_DB`        | Evet    | -                      | PostgreSQL veritabani    |
+| `KANDILLI_URL`       | Hayir   | koeri.boun.edu.tr/...  | Kandilli API URL         |
+| `AFAD_API`           | Hayir   | deprem.afad.gov.tr/... | AFAD API URL             |
+| `CRON_KEY`           | Hayir   | -                      | Cron endpoint auth key   |
+| `STATS_KEY`          | Hayir   | -                      | Stats endpoint auth key  |
+| `BYPASS_IPS`         | Hayir   | 127.0.0.1              | Rate limit bypass IP'ler |
+| `REQUEST_TIMEOUT_MS` | Hayir   | 30000                  | Request timeout (ms)     |
 
 ## Sorun Giderme
 

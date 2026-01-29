@@ -43,12 +43,12 @@ GET /deprem
 
 **Query Parametreleri:**
 
-| Parametre | Tip | Zorunlu | Aciklama |
-|-----------|-----|---------|----------|
-| skip | number | Hayir | Atlanacak kayit sayisi (varsayilan: 0) |
-| limit | number | Hayir | Maksimum kayit sayisi (varsayilan: 100) |
-| date | string | Hayir | Baslangic tarihi (YYYY-MM-DD) |
-| date_end | string | Hayir | Bitis tarihi (YYYY-MM-DD) |
+| Parametre | Tip    | Zorunlu | Aciklama                                |
+|-----------|--------|---------|-----------------------------------------|
+| skip      | number | Hayir   | Atlanacak kayit sayisi (varsayilan: 0)  |
+| limit     | number | Hayir   | Maksimum kayit sayisi (varsayilan: 100) |
+| date      | string | Hayir   | Baslangic tarihi (YYYY-MM-DD)           |
+| date_end  | string | Hayir   | Bitis tarihi (YYYY-MM-DD)               |
 
 **Ornek Istek:**
 
@@ -102,10 +102,10 @@ GET /deprem/kandilli/live
 
 **Query Parametreleri:**
 
-| Parametre | Tip | Zorunlu | Aciklama |
-|-----------|-----|---------|----------|
-| skip | number | Hayir | Atlanacak kayit sayisi |
-| limit | number | Hayir | Maksimum kayit sayisi |
+| Parametre | Tip    | Zorunlu | Aciklama               |
+|-----------|--------|---------|------------------------|
+| skip      | number | Hayir   | Atlanacak kayit sayisi |
+| limit     | number | Hayir   | Maksimum kayit sayisi  |
 
 **Ornek Istek:**
 
@@ -125,12 +125,12 @@ GET /deprem/kandilli/archive
 
 **Query Parametreleri:**
 
-| Parametre | Tip | Zorunlu | Aciklama |
-|-----------|-----|---------|----------|
-| date | string | Evet | Baslangic tarihi (YYYY-MM-DD) |
-| date_end | string | Hayir | Bitis tarihi (YYYY-MM-DD) |
-| skip | number | Hayir | Atlanacak kayit sayisi |
-| limit | number | Hayir | Maksimum kayit sayisi |
+| Parametre | Tip    | Zorunlu | Aciklama                      |
+|-----------|--------|---------|-------------------------------|
+| date      | string | Evet    | Baslangic tarihi (YYYY-MM-DD) |
+| date_end  | string | Hayir   | Bitis tarihi (YYYY-MM-DD)     |
+| skip      | number | Hayir   | Atlanacak kayit sayisi        |
+| limit     | number | Hayir   | Maksimum kayit sayisi         |
 
 **Ornek Istek:**
 
@@ -150,10 +150,10 @@ GET /deprem/afad/live
 
 **Query Parametreleri:**
 
-| Parametre | Tip | Zorunlu | Aciklama |
-|-----------|-----|---------|----------|
-| skip | number | Hayir | Atlanacak kayit sayisi |
-| limit | number | Hayir | Maksimum kayit sayisi |
+| Parametre | Tip    | Zorunlu | Aciklama               |
+|-----------|--------|---------|------------------------|
+| skip      | number | Hayir   | Atlanacak kayit sayisi |
+| limit     | number | Hayir   | Maksimum kayit sayisi  |
 
 **Ornek Istek:**
 
@@ -173,12 +173,12 @@ GET /deprem/afad/archive
 
 **Query Parametreleri:**
 
-| Parametre | Tip | Zorunlu | Aciklama |
-|-----------|-----|---------|----------|
-| date | string | Evet | Baslangic tarihi (YYYY-MM-DD) |
-| date_end | string | Hayir | Bitis tarihi (YYYY-MM-DD) |
-| skip | number | Hayir | Atlanacak kayit sayisi |
-| limit | number | Hayir | Maksimum kayit sayisi |
+| Parametre | Tip    | Zorunlu | Aciklama                      |
+|-----------|--------|---------|-------------------------------|
+| date      | string | Evet    | Baslangic tarihi (YYYY-MM-DD) |
+| date_end  | string | Hayir   | Bitis tarihi (YYYY-MM-DD)     |
+| skip      | number | Hayir   | Atlanacak kayit sayisi        |
+| limit     | number | Hayir   | Maksimum kayit sayisi         |
 
 **Ornek Istek:**
 
@@ -220,21 +220,21 @@ POST /deprem/data/search
 
 **Match Parametreleri:**
 
-| Parametre | Tip | Aciklama |
-|-----------|-----|----------|
-| mag | number | Minimum buyukluk |
-| cityCode | number | Sehir plaka kodu |
-| provider | string | "kandilli" veya "afad" |
+| Parametre   | Tip    | Aciklama                               |
+|-------------|--------|----------------------------------------|
+| mag         | number | Minimum buyukluk                       |
+| cityCode    | number | Sehir plaka kodu                       |
+| provider    | string | "kandilli" veya "afad"                 |
 | date_starts | string | Baslangic tarihi (YYYY-MM-DD HH:mm:ss) |
-| date_ends | string | Bitis tarihi (YYYY-MM-DD HH:mm:ss) |
+| date_ends   | string | Bitis tarihi (YYYY-MM-DD HH:mm:ss)     |
 
 **GeoNear Parametreleri (Konum Bazli Arama):**
 
-| Parametre | Tip | Aciklama |
-|-----------|-----|----------|
-| lon | number | Boylam (longitude) |
-| lat | number | Enlem (latitude) |
-| radiusMeter | number | Yaricap (metre) |
+| Parametre   | Tip    | Aciklama           |
+|-------------|--------|--------------------|
+| lon         | number | Boylam (longitude) |
+| lat         | number | Enlem (latitude)   |
+| radiusMeter | number | Yaricap (metre)    |
 
 **Sort Secenekleri:**
 
@@ -283,9 +283,9 @@ GET /deprem/data/get
 
 **Query Parametreleri:**
 
-| Parametre | Tip | Zorunlu | Aciklama |
-|-----------|-----|---------|----------|
-| earthquake_id | string | Evet | Deprem ID'si |
+| Parametre     | Tip    | Zorunlu | Aciklama     |
+|---------------|--------|---------|--------------|
+| earthquake_id | string | Evet    | Deprem ID'si |
 
 **Ornek Istek:**
 
@@ -345,17 +345,17 @@ curl "http://localhost:7979/deprem/status"
 
 Her deprem kaydinda asagidaki alanlar bulunur:
 
-| Alan | Tip | Aciklama |
-|------|-----|----------|
-| earthquake_id | string | Benzersiz deprem ID'si |
-| provider | string | Veri kaynagi ("kandilli" veya "afad") |
-| title | string | Deprem lokasyonu |
-| mag | number | Buyukluk (magnitude) |
-| depth | number | Derinlik (km) |
-| geojson | object | GeoJSON Point koordinatlari |
-| location_properties | object | Zenginlestirilmis konum bilgileri |
-| date_time | string | Deprem zamani |
-| created_at | number | Unix timestamp |
+| Alan                | Tip    | Aciklama                              |
+|---------------------|--------|---------------------------------------|
+| earthquake_id       | string | Benzersiz deprem ID'si                |
+| provider            | string | Veri kaynagi ("kandilli" veya "afad") |
+| title               | string | Deprem lokasyonu                      |
+| mag                 | number | Buyukluk (magnitude)                  |
+| depth               | number | Derinlik (km)                         |
+| geojson             | object | GeoJSON Point koordinatlari           |
+| location_properties | object | Zenginlestirilmis konum bilgileri     |
+| date_time           | string | Deprem zamani                         |
+| created_at          | number | Unix timestamp                        |
 
 ### location_properties Yapisi
 
@@ -387,12 +387,12 @@ Her deprem kaydinda asagidaki alanlar bulunur:
 
 ## Hata Kodlari
 
-| HTTP Kodu | Aciklama |
-|-----------|----------|
-| 200 | Basarili |
-| 400 | Gecersiz istek |
-| 429 | Rate limit asildi |
-| 500 | Sunucu hatasi |
+| HTTP Kodu | Aciklama          |
+|-----------|-------------------|
+| 200       | Basarili          |
+| 400       | Gecersiz istek    |
+| 429       | Rate limit asildi |
+| 500       | Sunucu hatasi     |
 
 ---
 

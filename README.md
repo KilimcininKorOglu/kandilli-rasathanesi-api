@@ -52,14 +52,14 @@ Swagger: `http://localhost:7979/deprem/api-docs/`
 
 ## Komutlar
 
-| Komut | Aciklama |
-|-------|----------|
-| `npm run dev` | API server (port 7979) |
-| `npm run dev:internal` | Cron service (port 7980) |
-| `npm run dev:all` | Her iki servisi birlikte baslat |
-| `npm start` | Production API (PM2, 4 instance) |
-| `npm run start:all` | Production her iki servis |
-| `npx biome check .` | Linter calistir |
+| Komut                  | Aciklama                         |
+|------------------------|----------------------------------|
+| `npm run dev`          | API server (port 7979)           |
+| `npm run dev:internal` | Cron service (port 7980)         |
+| `npm run dev:all`      | Her iki servisi birlikte baslat  |
+| `npm start`            | Production API (PM2, 4 instance) |
+| `npm run start:all`    | Production her iki servis        |
+| `npx biome check .`    | Linter calistir                  |
 
 ## Environment Degiskenleri
 
@@ -83,17 +83,17 @@ REQUEST_TIMEOUT_MS=30000
 
 ## API Endpoints
 
-| Method | Endpoint | Aciklama |
-|--------|----------|----------|
-| `GET` | `/deprem` | Tum kaynaklar - Son 24 saat |
-| `GET` | `/deprem/kandilli/live` | Kandilli - Son 24 saat |
-| `GET` | `/deprem/kandilli/archive` | Kandilli - Tarih araligi |
-| `GET` | `/deprem/afad/live` | AFAD - Son 24 saat |
-| `GET` | `/deprem/afad/archive` | AFAD - Tarih araligi |
-| `POST` | `/deprem/data/search` | Gelismis arama |
-| `GET` | `/deprem/data/get` | Tekil deprem bilgisi |
-| `GET` | `/deprem/statics/cities` | Sehir listesi |
-| `GET` | `/deprem/status` | API durumu |
+| Method | Endpoint                   | Aciklama                    |
+|--------|----------------------------|-----------------------------|
+| `GET`  | `/deprem`                  | Tum kaynaklar - Son 24 saat |
+| `GET`  | `/deprem/kandilli/live`    | Kandilli - Son 24 saat      |
+| `GET`  | `/deprem/kandilli/archive` | Kandilli - Tarih araligi    |
+| `GET`  | `/deprem/afad/live`        | AFAD - Son 24 saat          |
+| `GET`  | `/deprem/afad/archive`     | AFAD - Tarih araligi        |
+| `POST` | `/deprem/data/search`      | Gelismis arama              |
+| `GET`  | `/deprem/data/get`         | Tekil deprem bilgisi        |
+| `GET`  | `/deprem/statics/cities`   | Sehir listesi               |
+| `GET`  | `/deprem/status`           | API durumu                  |
 
 Detayli API dokumantasyonu: [docs/API.md](docs/API.md)
 
