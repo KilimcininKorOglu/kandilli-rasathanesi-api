@@ -97,6 +97,15 @@ REQUEST_TIMEOUT_MS=30000
 
 Detayli API dokumantasyonu: [docs/API.md](docs/API.md)
 
+## Swagger UI
+
+API interaktif olarak test edilebilir:
+
+- **Lokal:** `http://localhost:7979/deprem/api-docs/`
+- **Production:** `https://api.orhanaydogdu.com.tr/deprem/api-docs/`
+
+Swagger UI uzerinden tum endpointleri gorebilir, parametreleri test edebilir ve ornek response'lari inceleyebilirsiniz.
+
 ## Ornek Istek
 
 ```bash
