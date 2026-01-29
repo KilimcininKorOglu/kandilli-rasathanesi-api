@@ -10,13 +10,6 @@ const db = require('./src/db');
 const constants = require('./src/constants');
 const port = 7979;
 
-// connectors for db, cache etc.;
-async function connector() {
-	await db.PostgreSQL.connector();
-}
-
-connector();
-
 app.set('trust proxy', true);
 app.use((req, _res, next) => {
 	const ipFromExpress = req.ip;
@@ -66,6 +59,13 @@ app.use((_req, res) => {
 	return res.status(response.httpStatus).json(response);
 });
 
-app.listen(port, () => {
-	console.log(`Kandilli Rasathanesi API Service API - PORT: ${port}`);
-});
+// Start server after DB connection
+async function startServer() {
+	await db.PostgreSQL.connector();
+
+	app.listen(port, () => {
+		console.log(`Kandilli Rasathanesi API Service API - PORT: ${port}`);
+	});
+}
+
+startServer();

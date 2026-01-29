@@ -10,13 +10,6 @@ const kandilliCrawler = require('./src/helpers/crawler/kandilli');
 const afadCrawler = require('./src/helpers/crawler/afad');
 const port = 7980;
 
-// connectors for db, cache etc.;
-async function connector() {
-	await db.PostgreSQL.connector();
-}
-
-connector();
-
 app.set('trust proxy', true);
 app.use((req, _res, next) => {
 	const ipFromExpress = req.ip;
@@ -108,13 +101,18 @@ async function fetchEarthquakeData() {
 	}
 }
 
-// Run once on startup after DB connection, then every 5 seconds
-setTimeout(() => {
-	fetchEarthquakeData();
-	setInterval(fetchEarthquakeData, FETCH_INTERVAL_MS);
-}, 3000);
+// Start server after DB connection
+async function startServer() {
+	await db.PostgreSQL.connector();
 
-app.listen(port, () => {
-	console.log(`Kandilli Internal Service - PORT: ${port}`);
-	console.log(`Fetching earthquakes every ${FETCH_INTERVAL_MS / 1000} seconds`);
-});
+	app.listen(port, () => {
+		console.log(`Kandilli Internal Service - PORT: ${port}`);
+		console.log(`Fetching earthquakes every ${FETCH_INTERVAL_MS / 1000} seconds`);
+
+		// Start fetching after server is ready
+		fetchEarthquakeData();
+		setInterval(fetchEarthquakeData, FETCH_INTERVAL_MS);
+	});
+}
+
+startServer();
