@@ -131,10 +131,10 @@ class CRUD {
 	}
 
 	async aggregate(pipeline) {
-		let sql = `SELECT * FROM ${this.fullTable}`;
 		const values = [];
 		let paramIndex = 1;
 		let selectFields = '*';
+		let whereClause = '';
 		let groupBy = '';
 		let orderBy = '';
 		let limitClause = '';
@@ -142,10 +142,10 @@ class CRUD {
 
 		for (const stage of pipeline) {
 			if (stage.$match) {
-				const { whereClause, values: whereValues } = this._buildWhereClause(stage.$match, paramIndex);
-				sql = `SELECT * FROM ${this.fullTable} ${whereClause}`;
-				values.push(...whereValues);
-				paramIndex += whereValues.length;
+				const result = this._buildWhereClause(stage.$match, paramIndex);
+				whereClause = result.whereClause;
+				values.push(...result.values);
+				paramIndex += result.values.length;
 			}
 			if (stage.$sort) {
 				orderBy = this._buildOrderBy(stage.$sort);
@@ -166,12 +166,7 @@ class CRUD {
 			}
 		}
 
-		sql = `SELECT ${selectFields} FROM ${this.fullTable}`;
-		if (values.length > 0) {
-			const { whereClause } = this._buildWhereClause(pipeline.find((s) => s.$match)?.$match || {}, 1);
-			sql += ` ${whereClause}`;
-		}
-		sql += ` ${groupBy} ${orderBy} ${limitClause} ${offsetClause}`.trim();
+		let sql = `SELECT ${selectFields} FROM ${this.fullTable} ${whereClause} ${groupBy} ${orderBy} ${limitClause} ${offsetClause}`.trim();
 
 		const result = await pool.query(sql, values);
 		return result.rows;
