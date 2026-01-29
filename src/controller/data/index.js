@@ -162,7 +162,7 @@ module.exports.search = (req, res, next) => {
 		}
 
 		if (typeof req.body.geoNear === 'object') {
-			if (typeof req.body.geoNear.lon !== 'number' && typeof req.body.geoNear.lat !== 'number') {
+			if (typeof req.body.geoNear.lon !== 'number' || typeof req.body.geoNear.lat !== 'number') {
 				throw new constants.errors.WrongParam('data.search', 'lat or lon is not a number !');
 			}
 			if (typeof req.body.geoNear.radiusMeter !== 'number') {
@@ -171,15 +171,12 @@ module.exports.search = (req, res, next) => {
 					throw new constants.errors.WrongParam('data.search', 'radiusMeter isNaN !');
 				}
 			}
+			// Store geoNear params for PostgreSQL ST_DWithin query
 			body.geoNear = {
-				geojson: { $geoWithin: { $centerSphere: [[], 0] } },
+				lon: parseFloat(req.body.geoNear.lon),
+				lat: parseFloat(req.body.geoNear.lat),
+				radiusMeter: req.body.geoNear.radiusMeter,
 			};
-			body.geoNear.geojson['$geoWithin']['$centerSphere'][0][0] = parseFloat(req.body.geoNear.lon);
-			body.geoNear.geojson['$geoWithin']['$centerSphere'][0][1] = parseFloat(req.body.geoNear.lat);
-			body.geoNear.geojson['$geoWithin']['$centerSphere'][1] = helpers.metersToRadios(req.body.geoNear.radiusMeter);
-			if (body.geoNear.geojson['$geoWithin']['$centerSphere'][1] === false) {
-				throw new constants.errors.WrongParam('data.search', 'meters is false !');
-			}
 		}
 
 		if (typeof req.body.sort === 'string') {
