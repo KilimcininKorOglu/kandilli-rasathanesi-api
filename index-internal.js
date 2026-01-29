@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
-const cron = require('node-cron');
 
 const app = express();
 const helpers = require('./src/helpers');
@@ -101,13 +100,15 @@ async function fetchEarthquakeData() {
 	}
 }
 
-// Run cron job every minute
-cron.schedule('* * * * *', fetchEarthquakeData);
+const FETCH_INTERVAL_MS = 5000; // 5 seconds
 
-// Run once on startup after DB connection
-setTimeout(fetchEarthquakeData, 3000);
+// Run once on startup after DB connection, then every 5 seconds
+setTimeout(() => {
+	fetchEarthquakeData();
+	setInterval(fetchEarthquakeData, FETCH_INTERVAL_MS);
+}, 3000);
 
 app.listen(port, () => {
 	console.log(`Kandilli Internal Service - PORT: ${port}`);
-	console.log('Cron job scheduled: fetching earthquakes every minute');
+	console.log(`Fetching earthquakes every ${FETCH_INTERVAL_MS / 1000} seconds`);
 });
