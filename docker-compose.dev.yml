@@ -1,8 +1,6 @@
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: registry.keremgok.tr/kandilli-api:latest
     container_name: kandilli-api-dev
     ports:
       - "7979:7979"
@@ -30,9 +28,7 @@ services:
         condition: service_healthy
 
   cron:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: registry.keremgok.tr/kandilli-api:latest
     container_name: kandilli-cron-dev
     ports:
       - "7980:7980"
