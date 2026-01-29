@@ -71,8 +71,14 @@ app.use((_req, res) => {
 	return res.status(response.httpStatus).json(response);
 });
 
+const FETCH_INTERVAL_MS = 5000; // 5 seconds
+let isFetching = false;
+
 // Earthquake data fetcher function
 async function fetchEarthquakeData() {
+	if (isFetching) return;
+	isFetching = true;
+
 	const now = new helpers.date.kk_date();
 	const today = now.format('YYYY-MM-DD');
 	const yesterday = now.add(-1, 'days').format('YYYY-MM-DD');
@@ -97,10 +103,10 @@ async function fetchEarthquakeData() {
 		console.log(`[${new helpers.date.kk_date().format('YYYY-MM-DD HH:mm:ss')}] Fetch completed`);
 	} catch (error) {
 		console.error('Earthquake fetch error:', error.message);
+	} finally {
+		isFetching = false;
 	}
 }
-
-const FETCH_INTERVAL_MS = 5000; // 5 seconds
 
 // Run once on startup after DB connection, then every 5 seconds
 setTimeout(() => {
