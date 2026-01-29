@@ -241,9 +241,17 @@ module.exports.get = (req, res, next) => {
 		const query = {};
 
 		if (typeof req.query.earthquake_id === 'undefined') {
-			throw new constants.errors.MissingField('data.search', 'earthquake_id missing param !');
+			throw new constants.errors.MissingField('data.get', 'earthquake_id missing param !');
 		}
-		query.earthquake_id = req.query.earthquake_id.toString();
+
+		const earthquakeId = req.query.earthquake_id.toString();
+
+		// Validate earthquake_id format (13 character alphanumeric nanoid)
+		if (earthquakeId.length !== 13 || !/^[0-9A-Za-z_]+$/.test(earthquakeId)) {
+			throw new constants.errors.WrongParam('data.get', 'earthquake_id invalid format !');
+		}
+
+		query.earthquake_id = earthquakeId;
 		req.query = query;
 		return next();
 	} catch (error) {
