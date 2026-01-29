@@ -27,7 +27,7 @@ docker compose up -d
 
 Bu komut iki container baslatir:
 - `kandilli-api` - API servisi (port 7979)
-- `kandilli-cron` - Cron servisi (port 7980)
+- `kandilli-cron` - Veri cekme servisi (port 7980) - her 5 saniyede bir deprem verilerini ceker
 
 ### 3. Development Ortami (PostgreSQL dahil)
 
@@ -66,14 +66,11 @@ docker compose ps
 ### Image Yonetimi
 
 ```bash
-# Image'i yeniden build et
-docker compose build
+# Image'i registry'den cek
+docker pull registry.keremgok.tr/kandilli-api:latest
 
-# Cache olmadan build et
-docker compose build --no-cache
-
-# Image'i tag'le
-docker tag kandilli-rasathanesi-api_api:latest your-registry/kandilli-api:v1.0
+# Lokal build (opsiyonel)
+docker build -t registry.keremgok.tr/kandilli-api:latest .
 ```
 
 ### Veritabani Islemleri (Dev)
@@ -88,23 +85,15 @@ docker compose -f docker-compose.dev.yml exec postgres psql -U your_username -d 
 
 ## Production Deploy
 
-### 1. Image Olustur ve Yukle
+### 1. Image Cek
 
 ```bash
-# Build
-docker build -t kandilli-api:latest .
-
-# Registry'ye yukle
-docker tag kandilli-api:latest your-registry.com/kandilli-api:latest
-docker push your-registry.com/kandilli-api:latest
+docker pull registry.keremgok.tr/kandilli-api:latest
 ```
 
 ### 2. Sunucuda Calistir
 
 ```bash
-# Image'i cek
-docker pull your-registry.com/kandilli-api:latest
-
 # Container'i baslat
 docker run -d \
   --name kandilli-api \
@@ -115,7 +104,17 @@ docker run -d \
   -e POSTGRES_HOST=db.example.com \
   -e POSTGRES_PORT=5432 \
   -e POSTGRES_DB=deprem \
-  your-registry.com/kandilli-api:latest
+  registry.keremgok.tr/kandilli-api:latest
+```
+
+### 3. Docker Compose ile Deploy
+
+```bash
+# .env dosyasini olustur ve duzenle
+cp .env.example .env
+
+# Servisleri baslat
+docker compose up -d
 ```
 
 ## Healthcheck
