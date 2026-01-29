@@ -12,13 +12,26 @@ Kandilli Rasathanesi API, **Bogazici Universitesi Kandilli Rasathanesi** ve **AF
 
 **Ozellikler:**
 - Kandilli ve AFAD verilerini birlestirir
-- Her dakika otomatik guncelleme (cron job)
+- 5 saniyede bir otomatik guncelleme
 - GeoJSON formati ve konum zenginlestirme
 - En yakin sehirler, havaalanlari ve nufus bilgileri
 - Gelismis arama ve filtreleme
 - Rate limiting (dakikada 100 istek)
+- Docker destegi
 
 ## Hizli Baslangic
+
+### Docker ile (Onerilen)
+
+```bash
+# .env dosyasini olustur
+cp .env.example .env
+
+# Servisleri baslat
+docker compose up -d
+```
+
+### Manuel Kurulum
 
 ```bash
 # Bagimliliklari yukle
@@ -142,7 +155,21 @@ src/
 
 **Servisler:**
 - `index.js` - Public API (port 7979)
-- `index-internal.js` - Cron service (port 7980) - her dakika deprem verilerini ceker
+- `index-internal.js` - Data fetcher (port 7980) - 5 saniyede bir deprem verilerini ceker
+
+## Docker
+
+Image: `registry.keremgok.tr/kandilli-api:latest`
+
+```bash
+# Production
+docker compose up -d
+
+# Development (PostgreSQL dahil)
+docker compose -f docker-compose.dev.yml up -d
+```
+
+Detayli Docker dokumantasyonu: [docs/DOCKER.md](docs/DOCKER.md)
 
 ## Lisans
 
