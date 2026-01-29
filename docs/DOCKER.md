@@ -9,13 +9,13 @@ Bu dokuman, Kandilli Rasathanesi API'yi Docker ile calistirma talimatlarini icer
 
 ## Hizli Baslangic
 
-### 1. Environment Dosyasini Olustur
+### 1. Environment Dosyasini Olusturun
 
 ```bash
 cp .env.example .env
 ```
 
-`.env` dosyasini duzenle ve PostgreSQL bilgilerini gir.
+`.env` dosyasini duzenleyin ve PostgreSQL bilgilerini girin.
 
 ### 2. Production Ortami
 
@@ -26,8 +26,8 @@ docker compose up -d
 ```
 
 Bu komut iki container baslatir:
-- `kandilli-api` - API servisi (port 7979)
-- `kandilli-cron` - Veri cekme servisi (port 7980) - her 5 saniyede bir deprem verilerini ceker
+- `kandilli-api` - API servisi (port 7979).
+- `kandilli-cron` - Veri cekme servisi (port 7980) - her 5 saniyede bir deprem verilerini ceker.
 
 ### 3. Development Ortami (PostgreSQL dahil)
 
@@ -38,9 +38,9 @@ docker compose -f docker-compose.dev.yml up -d
 ```
 
 Bu komut uc container baslatir:
-- `kandilli-api-dev` - API servisi
-- `kandilli-cron-dev` - Cron servisi
-- `kandilli-postgres` - PostgreSQL veritabani
+- `kandilli-api-dev` - API servisi.
+- `kandilli-cron-dev` - Cron servisi.
+- `kandilli-postgres` - PostgreSQL veritabani.
 
 ## Docker Komutlari
 
@@ -158,24 +158,24 @@ docker compose exec api sh
 
 ### PostgreSQL baglanti hatasi
 
-1. `POSTGRES_HOST` degerinin dogru oldugunu kontrol et
-2. Harici DB icin: Host makine IP'si veya domain kullan (localhost degil)
-3. Dev ortaminda: `postgres` service adini kullan
+1. `POSTGRES_HOST` degerinin dogru oldugunu kontrol edin.
+2. Harici DB icin: Host makine IP'si veya domain kullanin (localhost degil).
+3. Dev ortaminda: `postgres` service adini kullanin.
 
 ### Port cakismasi
 
 ```bash
-# Port kullanimini kontrol et
+# Port kullanimini kontrol edin
 lsof -i :7979
 
-# Farkli port kullan
+# Farkli port kullanin
 docker run -p 8080:7979 ...
 ```
 
 ## Guvenlik Onerileri
 
-1. Production'da `.env` dosyasini commit etme
-2. Guclu sifreler kullan
-3. Gereksiz portlari disariya acma
-4. Docker secrets veya external secret manager kullan
-5. Non-root user ile calistir (Dockerfile'da mevcut)
+1. Production'da `.env` dosyasini commit etmeyin.
+2. Guclu sifreler kullanin.
+3. Gereksiz portlari disariya acmayin.
+4. Docker secrets veya external secret manager kullanin.
+5. Non-root user ile calistirin (Dockerfile'da mevcut).

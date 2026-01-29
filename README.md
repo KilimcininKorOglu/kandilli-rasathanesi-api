@@ -11,13 +11,13 @@ Turkiye deprem verilerini sunan REST API servisi.
 Kandilli Rasathanesi API, **Bogazici Universitesi Kandilli Rasathanesi** ve **AFAD** tarafindan yayinlanan deprem verilerini isleyerek, zenginlestirilmis ve kolayca kullanilabilir formatta sunan bir RESTful API servisidir.
 
 **Ozellikler:**
-- Kandilli ve AFAD verilerini birlestirir
-- 5 saniyede bir otomatik guncelleme
-- GeoJSON formati ve konum zenginlestirme
-- En yakin sehirler, havaalanlari ve nufus bilgileri
-- Gelismis arama ve filtreleme
-- Rate limiting (dakikada 100 istek)
-- Docker destegi
+- Kandilli ve AFAD verilerini birlestirir.
+- 5 saniyede bir otomatik guncelleme.
+- GeoJSON formati ve konum zenginlestirme.
+- En yakin sehirler, havaalanlari ve nufus bilgileri.
+- Gelismis arama ve filtreleme.
+- Rate limiting (dakikada 100 istek).
+- Docker destegi.
 
 ## Hizli Baslangic
 
@@ -184,5 +184,5 @@ Detayli Docker dokumantasyonu: [docs/DOCKER.md](docs/DOCKER.md)
 
 Ozel lisans altinda lisanslanmistir. Detaylar icin [LICENSE](LICENSE) dosyasina bakiniz.
 
-- Egitim ve kisisel kullanim ucretsiz
-- Ticari kullanim icin izin gerekli
+- Egitim ve kisisel kullanim ucretsizdir.
+- Ticari kullanim icin izin gereklidir.

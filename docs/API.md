@@ -10,9 +10,9 @@ http://localhost:7979/deprem
 
 ## Genel Bilgiler
 
-- Tum istekler JSON formatinda yanit doner
-- Tarih formati: `YYYY-MM-DD` veya `YYYY-MM-DD HH:mm:ss`
-- Rate limit: Dakikada 100 istek (IP basina)
+- Tum istekler JSON formatinda yanit doner.
+- Tarih formati: `YYYY-MM-DD` veya `YYYY-MM-DD HH:mm:ss`.
+- Rate limit: Dakikada 100 istek (IP basina).
 
 ## Yanit Formati
 
@@ -398,9 +398,9 @@ Her deprem kaydinda asagidaki alanlar bulunur:
 
 ## Rate Limiting
 
-- Limit: Dakikada 100 istek
-- Kapsam: IP basina
-- Asim durumunda HTTP 429 hatasi doner
+- Limit: Dakikada 100 istek.
+- Kapsam: IP basina.
+- Asim durumunda HTTP 429 hatasi doner.
 
 ---
 
